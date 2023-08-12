@@ -88,14 +88,14 @@ const CartItem = ({ item }) => {
               </span>
             </Typography>
             <Typography style={{ margin: "20px 0", color: "#000" }}>
-              <span className={classes.price}>₹{item.price.cost}</span>
+              <span className={classes.price}>₹{item.price.cost-((item.price.cost*item.price.discount)/100)}</span>
               &nbsp;&nbsp;&nbsp;
               <span className={classes.greyTextColor}>
-                <strike>₹{item.price.mrp}</strike>
+                <strike>₹{item.price.cost}</strike>
               </span>
               &nbsp;&nbsp;&nbsp;
               <span style={{ color: "#388E3C" }}>
-                {item.price.discount} off
+                {item.price.discount}% off
               </span>
             </Typography>
           </Link>

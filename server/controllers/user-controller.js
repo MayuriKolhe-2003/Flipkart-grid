@@ -3,9 +3,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
+  console.log( process.env.SECRET_KEY)
   const user = new User(req.body);
   try {
     const token = await user.generateAuthToken();
+    //console.log(token)
     await user.save();
     res.cookie("auth_token", token, {
       maxAge: 2629800000,

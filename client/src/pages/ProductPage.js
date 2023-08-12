@@ -113,14 +113,14 @@ function ProductPage() {
               </span>
             </Box>
             <Typography>
-              <span className={classes.price}>₹{product.price.cost}</span>
+              <span className={classes.price}>₹{product.price.cost-((product.price.cost*product.price.discount)/100)}</span>
               &nbsp;&nbsp;&nbsp;
               <span className={classes.greyTextColor}>
-                <strike>₹{product.price.mrp}</strike>
+                <strike>₹{product.price.cost}</strike>
               </span>
               &nbsp;&nbsp;&nbsp;
               <span style={{ color: "#388E3C" }}>
-                {product.price.discount} off
+                {product.price.discount} % off
               </span>
             </Typography>
             <ProductDetail product={product} />

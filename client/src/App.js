@@ -15,9 +15,11 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderFailedPage from "./pages/OrderFailedPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import monitorImg from './assets/monitors-laptop.png';
+import Supercoin from "./components/supercoin/Supercoin";
 
 //css
 import "./App.css";
+import SpinWheel from "./components/supercoin/SpinWheel";
 
 
 function App() { 
@@ -59,6 +61,12 @@ function App() {
             </Route>
             <Route exact path="/order-success">
               <OrderSuccessPage />
+            </Route>
+            <Route exact path="/supercoin">
+              <Supercoin />
+            </Route>
+            <Route exact path='/spinwheel'>
+              <SpinWheel />
             </Route>
             <Route component={ErrorPage} />
           </Switch>

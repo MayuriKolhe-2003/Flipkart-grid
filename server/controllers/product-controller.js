@@ -38,28 +38,12 @@ const getProductById = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  const productData = {
-    url: "https://rukminim1.flixcart.com/image/416/416/kcuug7k0/dining-table/n/g/g/4-seater-rosewood-sheesham-kw-ki128-kendalwood-furniture-natural-original-imaftwyq6jyycg67.jpeg?q=70",
-    detailUrl:
-      "https://rukminim1.flixcart.com/image/416/416/kcuug7k0/dining-table/n/g/g/4-seater-rosewood-sheesham-kw-ki128-kendalwood-furniture-natural-original-imaftwyrv4zvtez2.jpeg?q=70",
-    title: {
-      shortTitle: "Kendalwood Furniture Solid Wood 4 Seater Dining Table",
-      longTitle:
-        "Kendalwood Furniture Solid Wood 4 Seater Dining Table  (Finish Color - Natural Teak, DIY(Do-It-Yourself))",
-    },
-    price: {
-      mrp: 6501,
-      cost: 15000,
-      discount: "56%",
-    },
-    discount: "Extra ₹723 off",
-    tagline: "Trending",
-    category: "furniture",
-  };
+  const productData = req.body;
   try {
     const product = new Product(productData);
-    await product.save();
-    res.json();
+    const savedProduct = await product.save();
+    res.json(savedProduct);
+    //res.status(200).send("product added");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error });

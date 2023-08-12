@@ -9,7 +9,6 @@ function Signup() {
   const [action, setAction] = useState({
     openStep1: true,
     openStep2: false,
-    openOTPVerify: false,
   });
 
   const { phoneNumber } = useSelector((state) => state.userReducer);
@@ -21,7 +20,6 @@ function Signup() {
   return (
     <>
       {action.openStep1 && <SignupStep1 handleActions={handleActions} />}
-      {action.openOTPVerify && <OTPVerify handleActions={handleActions} phoneNumber={phoneNumber} />}
       {action.openStep2 && <SignupStep2 />}
     </>
   );

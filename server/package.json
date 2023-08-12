@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Fullstack flipkart clone web application",
   "main": "server.js",
-  "repository": "https://github.com/dhavalCode/flipkart-clone",
+  "repository": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "yarn install && cd client && yarn install && yarn build",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Dhaval Patel",
   "engines": {
@@ -23,6 +23,7 @@
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.4",
+    "nodemon": "^3.0.1",
     "uuid": "^8.3.2"
   }
 }

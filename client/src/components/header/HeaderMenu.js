@@ -13,6 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Stars from '@material-ui/icons/Stars';
 
 import {
   modalClose,
@@ -27,6 +28,7 @@ import toastMessage from "../../utils/toastMessage";
 import AuthPage from "../../pages/AuthPage";
 import ProfileMenu from "./ProfileMenu";
 import { clearCart } from "../../actions/cartActions";
+
 
 const useStyles = makeStyles((theme) => ({
   headerMenu: {
@@ -78,17 +80,21 @@ function HeaderMenu() {
 
   const location = useLocation();
   const dispatch = useDispatch();
-  useEffect(() => {
+  useEffect(async () => {
     if (location.pathname === "/login") {
       dispatch(setPopupLogin(false));
     } else {
       dispatch(setPopupLogin(true));
     }
     if (!isAuthenticate) {
-      authentication().then((res) => {
-        dispatch(setIsAuthenticate(res.isAuth));
-        dispatch(setUserInfo(res.user));
-      });
+      try{
+        const result = await authentication();
+      dispatch(result.isAuth);
+      dispatch(result.user);
+      }catch(e)
+      {
+        console.log(e)
+      }
     }
   }, [location.pathname, isAuthenticate]);
   const classes = useStyles();
@@ -144,6 +150,13 @@ function HeaderMenu() {
             <Badge badgeContent={cartItems.length} color="secondary"></Badge>
           )}
           <Typography className={classes.menu_cart}>Cart</Typography>
+        </Box>
+      </Link>
+
+      <Link to="/spinwheel">
+        <Box className={classes.menu_link}>
+          <Stars />
+          <Typography className={classes.menu_cart}>Spin</Typography>
         </Box>
       </Link>
 

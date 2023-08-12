@@ -50,8 +50,8 @@ const TotalView = ({ page = "cart" }) => {
     let price = 0,
       discount = 0;
     cartItems.map((item) => {
-      price += item.price.mrp * item.qty;
-      discount += (item.price.mrp - item.price.cost) * item.qty;
+      price += item.price.cost * item.qty;
+      discount += (item.price.cost*item.price.discount)/100;
     });
 
     setPrice(price);

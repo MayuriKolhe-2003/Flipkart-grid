@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema({
   price: {
     mrp: Number,
     cost: Number,
-    discount: String,
+    discount: Number,
   },
   qty:Number,
   category:String,

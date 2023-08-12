@@ -16,6 +16,7 @@ const useStyle = makeStyles({
 });
 
 const GroupedButton = ({ product }) => {
+  //console.log(product)
   const classes = useStyle();
   const [counter, setCounter] = useState(product.qty);
 
@@ -46,7 +47,7 @@ const GroupedButton = ({ product }) => {
         >
           -
         </Button>
-        <Button disabled>{counter}</Button>
+        <Button>{counter}</Button>
         <Button className={classes.button} onClick={() => handleIncrement()}>
           +
         </Button>

@@ -144,11 +144,6 @@ function SignupStep2() {
         isError: true,
         errorMsg: "Maximum 20 charterers allowed",
       };
-    } else if (!regPassword.test(pass)) {
-      return {
-        isError: true,
-        errorMsg: "Week Password !",
-      };
     } else {
       return {
         isError: false,

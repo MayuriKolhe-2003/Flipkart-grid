@@ -30,7 +30,7 @@ function HomePage() {
       <div className="first_productRow">
         <ProductRow
           isFirstRow={true}
-          categoryName="top offers"
+          categoryName="top_offers"
           title="Top Offers"
           subTitle="Deals Refresh Every 24 Hours"
         />
@@ -50,7 +50,7 @@ function HomePage() {
       />
       <ProductRow
         title="Top Deals"
-        categoryName="top deals"
+        categoryName="top_deals"
         subTitle="Daily crazy deals"
       />
       <PosterRow

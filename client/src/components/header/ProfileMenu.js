@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import MonetizationOn from '@material-ui/icons/MonetizationOn';
 
 const useStyles = makeStyles({
   container: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
 function ProfileMenu({ logout }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { user } = useSelector((state) => state.userReducer);
+  console.log(user);
   const classes = useStyles();
   const history = useHistory();
 
@@ -51,6 +53,9 @@ function ProfileMenu({ logout }) {
         break;
       case "orders":
         history.push("/orders");
+        break;
+      case "supercoins":
+        history.push("/supercoin");
         break;
       default:
         break;
@@ -95,6 +100,18 @@ function ProfileMenu({ logout }) {
           My Profile
         </MenuItem>
         <Divider className={classes.divider} />
+
+        <MenuItem
+          id="supercoins"
+          className={classes.menuItem}
+          onClick={handleClose}
+        >
+          <MonetizationOn className={classes.menuIcon} />
+          SuperCoin Zone
+        </MenuItem>
+        <Divider className={classes.divider} />
+
+
         <MenuItem
           id="orders"
           className={classes.menuItem}
@@ -106,7 +123,7 @@ function ProfileMenu({ logout }) {
             height="20"
             viewBox="0 0 24 18"
             className={classes.menuIcon}
-            style={{marginRight:15}}
+            style={{ marginRight: 15 }}
           >
             <g
               fill="none"
