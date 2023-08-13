@@ -1,12 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import './SpinWheel.css';
+
 
 const SpinningWheel = ({ sections, onSpin }) => {
     const [spinning, setSpinning] = useState(false);
     const wheelRef = useRef(null);
     const [btnSpin, setBtn] = useState('Spin Me');
+    const { user } = useSelector((state) => state.userReducer);
+
+    const checkSpin = async()=>{
+
+        const resp = await axios.get(`api/accounts/spin?id=${user._id}`)
+
+        if(resp)
+        {
+            setSpinning(resp.data);
+            if(resp.data)
+            {
+                setBtn('spinned')
+            }
+        }
+    }
+
+
+
     const spin = () => {
         if (!spinning) {
+            
             const randomDegree = Math.floor(Math.random() * 360); // Random degree for rotation
             const spins = 10; // Number of complete spins
             const totalRotation = 360 * spins + randomDegree;
@@ -26,6 +48,10 @@ const SpinningWheel = ({ sections, onSpin }) => {
         // setSpinning(true)
 
     };
+
+    useEffect(()=>{
+        checkSpin();
+    },[spinning])
 
     return (
         <div className="spinning-wheel-container">

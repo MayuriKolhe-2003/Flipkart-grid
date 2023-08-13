@@ -3,6 +3,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
+
+  const referral = req.query.ref;
+  
+ 
+
+  
   console.log( process.env.SECRET_KEY)
   const user = new User(req.body);
   try {
@@ -13,7 +19,21 @@ const signup = async (req, res) => {
       maxAge: 2629800000,
       httpOnly: true,
     });
-    res.status(201).json({ code: 201, isComplete: true });
+
+  if(referral)
+ {
+  console.log(referral);
+  // we have to reward both of them
+
+  res.status(201).json({ code: 201, isComplete: true ,isref:referral});
+
+
+ }
+ else{
+  res.status(201).json({ code: 201, isComplete: true,user });
+ }
+
+   
   } catch (error) {
     console.log(error);
     res

@@ -44,6 +44,7 @@ const {
   paytmGatway,
   paytmDataResponse,
 } = require("../controllers/payment-controller");
+const { isSpinned, setSpin } = require("../controllers/spinController");
 
 const router = express.Router();
 
@@ -58,6 +59,11 @@ router.get("/accounts/logout", logout);
 router.patch("/accounts/update-user-info", updateUserInfo);
 router.patch("/accounts/update-email", updateEmail);
 
+
+// spinnnig 
+
+router.get("/accounts/spin",isSpinned);
+router.get("/accounts/setspin",setSpin);
 //Product related routes
 
 router.get("/products/get-products", getProducts);
