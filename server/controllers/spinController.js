@@ -17,14 +17,14 @@ exports.isSpinned =  async(req,res)=>{
 
             // res.send(stat);
             // return;
-
+               console.log("->>",stat);
 
             if(!stat)
             {
                 Spin.create({userId:user})
                 .then((r)=>
                 {
-                        res.send(true)
+                        res.send(false)
                     })
                     .catch((E)=>{
                         console.log(E);
@@ -34,25 +34,8 @@ exports.isSpinned =  async(req,res)=>{
                     return;
             }
 
-            if(stat.isSpinned)
-            {
-                res.json({message:"already spinned",stat:true});
-                return;
-            }
-
-
-
            
-         const re =   await Spin.updateOne({userId:user},{$set:{isSpinned:true}});
-         if(re)
-         {
-            res.send(true);
-         }            
-         else{
-            res.send(err);
-         }
-            
-
+            res.send(stat.isSpinned);
             
 
       
@@ -68,22 +51,20 @@ exports.isSpinned =  async(req,res)=>{
                 res.status(404).send("User not found");
                 return;
             }
-            // const stat =await Spin.findOne({userId:user});
-
-            // res.send(stat);
-            // return;
-
-
-
-         const re =   await Spin.updateOne({userId:user},{$set:{isSpinned:false}});
+          
+         const re =   await Spin.updateOne({userId:user},{$set:{isSpinned:true}});
          if(re)
          {
-            res.send(false);
+            res.send(true);
          }            
          else{
             res.send(err);
          }
             
+
+         
+
+
 
         }
 

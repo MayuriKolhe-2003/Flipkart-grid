@@ -10,7 +10,7 @@ const SpinWheel = mongoose.Schema({
   },
   isSpinned: {
     type: Boolean,
-    default:true
+    default:false
   },
 });
 
