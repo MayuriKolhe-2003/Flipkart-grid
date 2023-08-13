@@ -8,7 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import MonetizationOn from '@material-ui/icons/MonetizationOn';
+import OfflineBolt from '@material-ui/icons/OfflineBolt';
 
 const useStyles = makeStyles({
   container: {
@@ -106,7 +106,7 @@ function ProfileMenu({ logout }) {
           className={classes.menuItem}
           onClick={handleClose}
         >
-          <MonetizationOn className={classes.menuIcon} />
+          <OfflineBolt className={classes.menuIcon} />
           SuperCoin Zone
         </MenuItem>
         <Divider className={classes.divider} />

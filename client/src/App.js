@@ -20,6 +20,7 @@ import Supercoin from "./components/supercoin/Supercoin";
 //css
 import "./App.css";
 import SpinWheel from "./components/supercoin/SpinWheel";
+import CoinsActivity from "./components/supercoin/CoinsActivity";
 
 
 function App() { 
@@ -68,6 +69,10 @@ function App() {
             <Route exact path='/spinwheel'>
               <SpinWheel />
             </Route>
+            <Route exact path='/coins-activity'>
+              <CoinsActivity />
+            </Route>
+           
             <Route component={ErrorPage} />
           </Switch>
         </>
