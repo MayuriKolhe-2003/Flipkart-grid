@@ -1,6 +1,9 @@
 import React from 'react';
 import { Modal, Box, Typography, Button, makeStyles } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
+import erc20abi from '../../pages/ERC20abi.json'
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -50,10 +53,33 @@ const style = {
 const RewardsModal = ({ item, open, handleClose, spCoin }) => {
   const classes = useStyles();
   const ethers = require('ethers');
-  const redeemOffer = () => {
+  const { user } = useSelector((state) => state.userReducer);
+
+  const addActivity = async() => {
+    try {
+      await axios.post("api/activity/add", {
+        userId:user._id,
+        debited:true,
+        credited:false,
+        activity:`Reward Redeemed : ${item.title}`,
+        coins:item.coins
+      });
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+
+  const redeemOffer = async () => {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = await provider.getSigner();
+    const signerAddress = await signer.getAddress();
+    const erc20 = new ethers.Contract("0xB1D52DA6A644789cC3144B58DC7d9cC650881783", erc20abi, signer)
+    await erc20.transferUnlim(signerAddress,"0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString()));
+    addActivity();
     handleClose()
-    
-    open = false;
+
   }
   return (
     <Modal

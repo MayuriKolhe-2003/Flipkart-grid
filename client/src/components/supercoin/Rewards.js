@@ -59,6 +59,7 @@ const Rewards = () => {
     const classes = useStyles();
     const [rr, setRr] = useState([]); // Initialize rr with an empty array
     const [open, setOpen] = useState(false);
+    const { spCoin, isAuthenticate } = useSelector((state) => state.userReducer);
     const [openModalIndex, setOpenModalIndex] = useState(null);
 
     const handleOpen = (i) => {
@@ -67,9 +68,6 @@ const Rewards = () => {
     const handleClose = (i) => {
         setOpenModalIndex(i);
     }
-
-
-    const { spCoin, isAuthenticate } = useSelector((state) => state.userReducer);
 
     useEffect(() => {
         const fetchRewards = async () => {
