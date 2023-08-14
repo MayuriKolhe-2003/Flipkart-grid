@@ -28,6 +28,8 @@ import AddressCard from "../components/address/AddressCard";
 import LoaderSpinner from "../components/LoaderSpinner";
 import ToastMessageContainer from "../components/ToastMessageContainer";
 
+import erc20abi from "./ERC20abi.json";
+
 const useStyle = makeStyles((theme) => ({
   component: {
     marginTop: 55,
@@ -169,6 +171,7 @@ const CheckoutPage = () => {
 
   const history = useHistory();
   const query = useQuery();
+  const ethers = require('ethers');
 
   useEffect(() => {
     //check if request from cart page or not
@@ -228,6 +231,23 @@ const CheckoutPage = () => {
           paymentStatus: "Completed",
         });
         await dispatch(clearCart());
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const signerAddress = await signer.getAddress();
+        const erc20 = new ethers.Contract("0x35af617fF01Fd4c6990572C64FF1Ba838D7EEdFC", erc20abi, signer)
+        var coin = 0;
+        if (totalAmount > 2500) {
+          coin = 50;
+        }
+        else if (totalAmount < 0) {
+          coin = 0;
+        }
+        else {
+          coin = Math.floor(totalAmount / 100) * 2;
+        }
+        console.log(signerAddress);
+        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
         window.location.replace("order-success");
       } catch (error) {
         console.log(error);
@@ -424,7 +444,7 @@ const CheckoutPage = () => {
                       value={paymentMode}
                       onChange={changePaymentMode}
                     >
-                      <Box style={{ display: "flex" }}>
+                      {/* <Box style={{ display: "flex" }}>
                         <FormControlLabel
                           value="online"
                           control={<Radio style={{ color: "#2874f0" }} />}
@@ -436,11 +456,12 @@ const CheckoutPage = () => {
                             alt=""
                           />
                         </div>
-                      </Box>
+                      </Box> */}
                       <FormControlLabel
                         value="cash"
                         control={<Radio style={{ color: "#2874f0" }} />}
-                        label="Cash on Delivery"
+                        label="Pay Now"
+
                       />
                     </RadioGroup>
                     {paymentMode && (

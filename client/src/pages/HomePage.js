@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Box, makeStyles } from "@material-ui/core";
 
@@ -8,15 +8,12 @@ import PosterRow from "../components/PosterRow";
 import FeaturedBrandsRow from "../components/FeaturedBrandsRow";
 import ProductRow from "../components/product/ProductRow";
 import Footer from "../components/footer/Footer";
-import erc20abi from "./ERC20abi.json";
-import { setSpCoin } from "../actions/userActions";
 
 
-import { featuredBrandLinks, posterLinks, sidePosterLink  } from "../constants/data";
+import { featuredBrandLinks, posterLinks, sidePosterLink } from "../constants/data";
 
 import "../styles/HomePage.css";
 import "react-toastify/dist/ReactToastify.min.css";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   homePage: {
@@ -25,30 +22,7 @@ const useStyles = makeStyles({
 });
 function HomePage() {
   const classes = useStyles();
-  const ethers = require('ethers');
-  const { isAuthenticate } = useSelector((state) => state.userReducer);
 
-  useEffect(() => {
-    getCoin()
-  }, [])
-
-  const getCoin = async() => {
-    if (isAuthenticate){
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const erc20 = new ethers.Contract("0x35af617fF01Fd4c6990572C64FF1Ba838D7EEdFC", erc20abi, provider);
-      const signer = await provider.getSigner();
-      const signerAddress = await signer.getAddress();
-      const balancewei = await erc20.balanceOf(signerAddress);
-      const balance = ethers.formatEther(balancewei,18);
-      console.log(balance);
-      setSpCoin(balance);
-
-    }
-  }
-
-  
-  
   return (
     <Box className={classes.homePage}>
       <Navbar />
@@ -60,7 +34,7 @@ function HomePage() {
           title="Top Offers"
           subTitle="Deals Refresh Every 24 Hours"
         />
-        <div style={{ padding: 1, backgroundColor: "#ffffff", cursor:"pointer" }}>
+        <div style={{ padding: 1, backgroundColor: "#ffffff", cursor: "pointer" }}>
           <img
             src={sidePosterLink}
             alt="Ads"
@@ -101,7 +75,7 @@ function HomePage() {
         brandsUrls={featuredBrandLinks.links2}
       />
       <ProductRow title="Furniture" categoryName="furniture" />
-      <Footer/>
+      <Footer />
     </Box>
   );
 }

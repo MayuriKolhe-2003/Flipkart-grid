@@ -70,13 +70,14 @@ const useStyles = makeStyles((theme) => ({
 
 const CoinsActivity = () => {
     const classes = useStyles();
+    const { spCoin } = useSelector((state) => state.userReducer);
     return (
         <Box className={classes.component}>
             <Box className={classes.heading}>
                 <Typography variant="h6">Supercoin Balance</Typography>
                 <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" />
                 <Typography variant="h6">
-                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>0</span>
+                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{spCoin}</span>
                 </Typography>
             </Box>
 

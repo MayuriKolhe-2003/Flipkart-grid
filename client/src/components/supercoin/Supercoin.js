@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, Typography, Box, Button, Grid, Link } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Link as RouteLink } from 'react-router-dom'
+
+import erc20abi from "../../pages/ERC20abi.json";
+import { setSpCoin } from "../../actions/userActions";
+
 const useStyles = makeStyles((theme) => ({
     component: {
         width: '60%',
@@ -99,8 +103,30 @@ const useStyles = makeStyles((theme) => ({
 
 const Supercoin = () => {
     const classes = useStyles();
-    const { spCoin } = useSelector((state) => state.userReducer);
+    const dispatch = useDispatch();
+    const ethers = require('ethers');
+    const { spCoin,isAuthenticate } = useSelector((state) => state.userReducer);
     console.log(spCoin);
+
+    useEffect(() => {
+        getCoin()
+      }, [spCoin])
+    
+      const getCoin = async () => {
+        if (isAuthenticate) {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          await provider.send("eth_requestAccounts", []);
+          const erc20 = new ethers.Contract("0x35af617fF01Fd4c6990572C64FF1Ba838D7EEdFC", erc20abi, provider);
+          const signer = await provider.getSigner();
+          const signerAddress = await signer.getAddress();
+          const balancewei = await erc20.balanceOf(signerAddress);
+          const balance = ethers.formatEther(balancewei, 18);
+          console.log(balance);
+          dispatch(setSpCoin(balance));
+          // setSpCoin(balance);
+    
+        }
+      }
 
     return (
         <Box className={classes.component}>
@@ -108,7 +134,7 @@ const Supercoin = () => {
                 <Typography variant="h5">Supercoin Balance</Typography>
                 <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" />
                 <Typography variant="h6">
-                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>0</span>
+                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{spCoin}</span>
                 </Typography>
             </Box>
 
@@ -121,13 +147,13 @@ const Supercoin = () => {
             <Box className={classes.imageContainer}>
                 <img
                     src="https://rukminim2.flixcart.com/lockin/1000/1000/images/01AvailExtra.jpg?q=50"
-                    alt="Image"
+                    alt="img"
                     className={classes.image}
                 />
 
                 <img
                     src="https://rukminim2.flixcart.com/lockin/1000/1000/images/02TrendyProd.jpg?q=50"
-                    alt="Image"
+                    alt="img"
                     className={classes.image}
                     style={{ marginTop: '20px' }}
                 />
@@ -146,13 +172,13 @@ const Supercoin = () => {
 
             <Grid container spacing={2}>
                 <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/28/06/2023/19d74555-c732-4ed4-97d7-a301b51fd797.png?q=50" alt="Image 1" className={classes.image} />
+                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/28/06/2023/19d74555-c732-4ed4-97d7-a301b51fd797.png?q=50" alt="img 1" className={classes.image} />
                 </Grid>
                 <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/01/08/2023/a0669428-600c-4e64-aeac-2a2d0412fc42.png?q=50" alt="Image 2" className={classes.image} />
+                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/01/08/2023/a0669428-600c-4e64-aeac-2a2d0412fc42.png?q=50" alt="img 2" className={classes.image} />
                 </Grid>
                 <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/19/04/2023/16a7f155-3dd9-400e-a093-ad4344a6e7cd.png?q=50" alt="Image 3" className={classes.image} />
+                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/19/04/2023/16a7f155-3dd9-400e-a093-ad4344a6e7cd.png?q=50" alt="img 3" className={classes.image} />
                 </Grid>
             </Grid>
 

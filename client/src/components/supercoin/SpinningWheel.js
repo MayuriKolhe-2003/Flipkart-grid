@@ -5,21 +5,19 @@ import './SpinWheel.css';
 
 
 const SpinningWheel = ({ sections, onSpin }) => {
-    const [spinning, setSpinning] = useState(true);
+    const [spinning, setSpinning] = useState(false);
     const wheelRef = useRef(null);
     const [btnSpin, setBtn] = useState('Spin Me');
     const { user } = useSelector((state) => state.userReducer);
 
-    const checkSpin = async()=>{
+    const checkSpin = async () => {
 
         const resp = await axios.get(`api/accounts/spin?id=${user._id}`)
         console.log(resp);
-        if(resp)
-        {
+        if (resp) {
             setSpinning(resp.data);
-            if(resp.data)
-            {
-                setBtn('spinned')
+            if (resp.data) {
+                setBtn('Spinned')
             }
         }
     }
@@ -28,17 +26,17 @@ const SpinningWheel = ({ sections, onSpin }) => {
 
     const spin = () => {
 
-        
+
 
         if (!spinning) {
-            axios.get(`api/accounts/setspin?id=${user._id}`)
-        .then((r)=>{
-            setSpinning(r.data);
-            console.log(r);
-        })
-        .catch((e)=>{
-            console.log(e);
-        })
+            //     axios.get(`api/accounts/setspin?id=${user._id}`)
+            // .then((r)=>{
+            //     setSpinning(r.data);
+            //     console.log(r);
+            // })
+            // .catch((e)=>{
+            //     console.log(e);
+            // })
             const randomDegree = Math.floor(Math.random() * 360); // Random degree for rotation
             const spins = 10; // Number of complete spins
             const totalRotation = 360 * spins + randomDegree;
@@ -59,9 +57,9 @@ const SpinningWheel = ({ sections, onSpin }) => {
 
     };
 
-    useEffect(()=>{
-        checkSpin();
-    },[spinning])
+    // useEffect(() => {
+    //     checkSpin();
+    // }, [spinning])
 
     return (
         <div className="spinning-wheel-container">
@@ -72,7 +70,7 @@ const SpinningWheel = ({ sections, onSpin }) => {
                     </div>
                 ))}
             </div>
-            <button className="spin-button" onClick={spin} disabled={spinning}>
+            <button className="spin-button" onClick={spin}>
                 {btnSpin}
             </button>
         </div>
