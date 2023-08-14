@@ -2,6 +2,7 @@ import * as actionType from "../action-type/userActionType";
 
 const initialState = {
   isLogin: true,
+  spCoin: 0,
   phoneNumber: "",
   popupLogin: true,
   isModalOpen: false,
@@ -16,6 +17,8 @@ const userReducer = (state = initialState, action) => {
       return { ...state, OTPResult: action.payload.confirmResult };
     case actionType.SET_IS_LOGIN:
       return { ...state, isLogin: action.payload.isLogin };
+    case actionType.SET_SUPERCOIN:
+      return { ...state, spCoin: action.payload.spCoin };
     case actionType.SET_MOBILE_NUMBER:
       return { ...state, phoneNumber: action.payload.phoneNumber };
     case actionType.SET_IS_AUTHENTICATE:
@@ -45,7 +48,7 @@ const userReducer = (state = initialState, action) => {
     case actionType.OPEN_MODAL:
       return { ...state, isModalOpen: true };
     
-      case actionType.CLOSE_MODAL:
+    case actionType.CLOSE_MODAL:
       return { ...state, isModalOpen: false };
 
     default:

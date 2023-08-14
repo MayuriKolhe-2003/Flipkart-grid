@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '20px 30px',
     },
     heading: {
-        
+
         display: 'flex',
         alignItems: 'center',
         '& img': {
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'capitalize',
     },
     button: {
-        margin:'30px 0',
+        margin: '30px 0',
         backgroundColor: '#d4d3cf', // Gray background color
         color: '#000', // White text color
         textTransform: 'none', // Prevents uppercase text transformation
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     image: {
         height: "100px",
         width: "100%",
-        marginTop:'20px',
+        marginTop: '20px',
     },
     faqContainer: {
         maxWidth: '90%',
@@ -99,7 +99,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Supercoin = () => {
     const classes = useStyles();
-    const { isAuthenticate } = useSelector((state) => state.userReducer);
+    const { spCoin } = useSelector((state) => state.userReducer);
+    console.log(spCoin);
 
     return (
         <Box className={classes.component}>
@@ -128,7 +129,7 @@ const Supercoin = () => {
                     src="https://rukminim2.flixcart.com/lockin/1000/1000/images/02TrendyProd.jpg?q=50"
                     alt="Image"
                     className={classes.image}
-                    style={{marginTop:'20px'}}
+                    style={{ marginTop: '20px' }}
                 />
             </Box>
 

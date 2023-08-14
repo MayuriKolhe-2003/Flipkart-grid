@@ -7,6 +7,13 @@ export const setIsLogin = (isLogin) => ({
   },
 });
 
+export const setSpCoin = (spCoin) => ({
+  type: actionType.SET_SUPERCOIN,
+  payload: {
+    spCoin,
+  },
+});
+
 export const setMobileNumber = (phoneNumber) => ({
   type: actionType.SET_MOBILE_NUMBER,
   payload: {

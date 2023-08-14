@@ -5,7 +5,7 @@ import './SpinWheel.css';
 
 
 const SpinningWheel = ({ sections, onSpin }) => {
-    const [spinning, setSpinning] = useState(false);
+    const [spinning, setSpinning] = useState(true);
     const wheelRef = useRef(null);
     const [btnSpin, setBtn] = useState('Spin Me');
     const { user } = useSelector((state) => state.userReducer);

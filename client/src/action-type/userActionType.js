@@ -1,5 +1,6 @@
 export const SET_VERIFICATION_CODE="setVerificationCode";
 export const SET_IS_LOGIN="setIsLogin";
+export const SET_SUPERCOIN="setSpCoin";
 export const SET_MOBILE_NUMBER="setMobileNumber";
 export const SET_IS_AUTHENTICATE="setIsAuthenticate";
 export const SET_USER_INFO="setUserInfo";
