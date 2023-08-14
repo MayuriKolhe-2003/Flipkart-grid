@@ -49,6 +49,12 @@ const style = {
 
 const RewardsModal = ({ item, open, handleClose, spCoin }) => {
   const classes = useStyles();
+  const ethers = require('ethers');
+  const redeemOffer = () => {
+    handleClose()
+    
+    open = false;
+  }
   return (
     <Modal
       open={open}
@@ -82,8 +88,7 @@ const RewardsModal = ({ item, open, handleClose, spCoin }) => {
             <LockIcon />
             Not Enough Coins
           </Button> :
-          <Button className={classes.button}>
-            <LockIcon />
+          <Button onClick={redeemOffer} className={classes.button}>
             Unlock Offer
           </Button>}
 

@@ -255,7 +255,7 @@ const CheckoutPage = () => {
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0x35af617fF01Fd4c6990572C64FF1Ba838D7EEdFC", erc20abi, signer)
+        const erc20 = new ethers.Contract("0xB1D52DA6A644789cC3144B58DC7d9cC650881783", erc20abi, signer)
         var coin = 0;
         if (totalAmount > 2500) {
           coin = 50;
