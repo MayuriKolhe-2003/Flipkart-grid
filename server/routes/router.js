@@ -6,6 +6,10 @@ const {
   getProductsByCategory,
 } = require("../controllers/product-controller");
 const {
+  addActivity,
+  getActivity
+} = require("../controllers/userActivityController");
+const {
   addItem,
   removeItem,
   removeAllItem,
@@ -58,6 +62,8 @@ router.get("/accounts/authentication", authentication);
 router.get("/accounts/logout", logout);
 router.patch("/accounts/update-user-info", updateUserInfo);
 router.patch("/accounts/update-email", updateEmail);
+router.post('/activity/add',addActivity)
+router.get('/activity/get',getActivity)
 
 
 // spinnnig 

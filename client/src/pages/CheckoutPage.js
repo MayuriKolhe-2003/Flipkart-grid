@@ -172,6 +172,9 @@ const CheckoutPage = () => {
   const history = useHistory();
   const query = useQuery();
   const ethers = require('ethers');
+  const transitems = cartItems.map((obj) => {
+    return obj.title.shortTitle;
+  })
 
   useEffect(() => {
     //check if request from cart page or not
@@ -180,6 +183,7 @@ const CheckoutPage = () => {
     }
 
     if (isAuthenticate) {
+      // console.log(cartItems[0].title.shortTitle);
       dispatch(getCartItems());
       dispatch(getAddresses());
       setTimeout(() => {
@@ -219,6 +223,22 @@ const CheckoutPage = () => {
     setPaymentMode(e.target.value);
   };
 
+  const addActivity = async(coin) => {
+    try {
+      await axios.post("/activity/add", {
+        userId:user._id,
+        debited:false,
+        credited:true,
+        activity:`Product purchased : ${transitems}`,
+        productname:"",
+        coins:coin
+      });
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+
   const confirmOrder = async () => {
     if (paymentMode == "cash") {
       try {
@@ -248,6 +268,17 @@ const CheckoutPage = () => {
         }
         console.log(signerAddress);
         await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
+        
+        addActivity(coin).then(() => {
+          console.log("Success");
+          axios.get(`/activity/get?id=${user._id}`)
+          .then(res => {
+            console.log(res);
+          })
+        })
+        .catch((err) => {
+          console.log(err);
+        });
         window.location.replace("order-success");
       } catch (error) {
         console.log(error);

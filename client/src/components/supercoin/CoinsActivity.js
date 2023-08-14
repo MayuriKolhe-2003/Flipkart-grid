@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, Typography, Box, Button, Grid, Link } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,47 +31,60 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         paddingTop: theme.spacing(4),
     },
-    banner:{
-        margin:'20px 0',
+    banner: {
+        margin: '20px 0',
         '& img': {
-            width:'100%',
-            borderRadius:'5px'
+            width: '100%',
+            borderRadius: '5px'
         }
     },
     recent: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginLeft:  theme.spacing(3),
-        marginTop:theme.spacing(1),
+        marginLeft: theme.spacing(3),
+        marginTop: theme.spacing(1),
     },
     recentHeading: {
         fontWeight: 'bold',
         fontSize: '24px',
     },
-    muted :{
-        marginLeft:theme.spacing(3),
-        marginBottom:theme.spacing(1),
-        color:'gray',
-        fontSize:'12px',
+    muted: {
+        marginLeft: theme.spacing(3),
+        marginBottom: theme.spacing(1),
+        color: 'gray',
+        fontSize: '12px',
     },
-    plus:{
-        color:'green',
-        fontWeight:'bold',
+    plus: {
+        color: 'green',
+        fontWeight: 'bold',
     },
-    minus:{
-        color:'red',
-        fontWeight:'bold',
+    minus: {
+        color: 'red',
+        fontWeight: 'bold',
     },
-    hrc:{
-       border:'0.1px solid #dadada'
+    hrc: {
+        border: '0.1px solid #dadada'
     }
 }
 ))
 
 const CoinsActivity = () => {
     const classes = useStyles();
-    const { spCoin } = useSelector((state) => state.userReducer);
+    const [myAct, setMyAct] = useState([]);
+    const { spCoin, user } = useSelector((state) => state.userReducer);
+
+    useEffect(() => {
+        axios.get(`/api/activity/get?id=${user._id}`)
+        .then(res => {
+            console.log(res);
+            setMyAct(res.data.reverse())
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }, [])
+
     return (
         <Box className={classes.component}>
             <Box className={classes.heading}>
@@ -82,40 +96,37 @@ const CoinsActivity = () => {
             </Box>
 
             <Box className={classes.banner}>
-            <img  src='https://rukminim2.flixcart.com/lockin/1000/1000/images/non-plus-coinbalance-slice.jpg?q=50' />
+                <img src='https://rukminim2.flixcart.com/lockin/1000/1000/images/non-plus-coinbalance-slice.jpg?q=50' />
             </Box>
 
             <div className={classes.recent}>
                 <Typography variant="h4" className={classes.recentHeading}>
                     Recent Coin Activity
                 </Typography>
-                
+
                 <Typography>
-                <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" style={{ height: '15px',margin:'0 5px'}}/>
-                    <span style={{ color: 'gray'}}>Coins</span>
+                    <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" style={{ height: '15px', margin: '0 5px' }} />
+                    <span style={{ color: 'gray' }}>Coins</span>
                 </Typography>
             </div>
 
-           
 
-            <div className='coins'>
-                <Box className={classes.recent}>
-                <Typography>Expired Coins</Typography>
-                <Typography className={classes.minus}>- 06</Typography>
-                </Box>
-                <Typography className={classes.muted}>Debited on 01 Jun 2023</Typography>
-            </div>
-            <hr className={classes.hrc}/>
-
-            <div className='coins'>
-                <Box className={classes.recent}>
-                <Typography>Rigo Women Bodycon Black, Maroon, White Dress</Typography>
-                <Typography className={classes.plus}>+ 04</Typography>
-                </Box>
-                <Typography className={classes.muted}>Credited on 24 May 2022</Typography>
-            </div>
-            <hr className={classes.hrc}/>
-
+            {
+                myAct && myAct.map((obj) => {
+                    return (
+                        <div>
+                            <div className='coins'>
+                                <Box className={classes.recent}>
+                                    <Typography>{obj.activity}</Typography>
+                                    <Typography className={obj.credited ? classes.plus : classes.minus}>{obj.credited ? "+" : "-"}{obj.coins}</Typography>
+                                </Box>
+                                <Typography className={classes.muted}>{obj.credited ? "Credited" : "Debited"} on 01 Jun 2023</Typography>
+                            </div>
+                            <hr className={classes.hrc} />
+                        </div>
+                    )
+                })
+            }
         </Box>
     )
 }

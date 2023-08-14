@@ -5,6 +5,7 @@ import SpinningWheel from './SpinningWheel';
 import { useState } from "react";
 import { emptyCartUrl } from "../../constants/data";
 import erc20abi from "../../pages/ERC20abi.json";
+import axios from "axios";
 
 const useStyle = makeStyles((theme) => ({
   component: {
@@ -38,9 +39,25 @@ const useStyle = makeStyles((theme) => ({
 const SpinWheel = () => {
   const classes = useStyle();
   const ethers = require('ethers');
-  const { isAuthenticate } = useSelector((state) => state.userReducer);
+  const { isAuthenticate, user } = useSelector((state) => state.userReducer);
   const sections = ['1', '2', '3', '4', '5', '6', '7', '8'];
   const [result, setResult] = useState('Spin Me To get Coins');
+
+  const addActivity = async(coin) => {
+    try {
+      await axios.post("api/activity/add", {
+        userId:user._id,
+        debited:false,
+        credited:true,
+        activity:"Daily Spin",
+        // productname:"",
+        coins:coin
+      });
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
 
   const handleSpin = async (selectedSection) => {
     setResult(`You got : ${selectedSection} coins`);
@@ -51,6 +68,16 @@ const SpinWheel = () => {
     const signerAddress = await signer.getAddress();
     const erc20 = new ethers.Contract("0x35af617fF01Fd4c6990572C64FF1Ba838D7EEdFC", erc20abi, signer)
     await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", signerAddress, ethers.parseEther(selectedSection.toString()));
+    addActivity(selectedSection).then(() => {
+      console.log("Success");
+      axios.get(`/api/activity/get?id=${user._id}`)
+      .then(res => {
+        console.log(res);
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
