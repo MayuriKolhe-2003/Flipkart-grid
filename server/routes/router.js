@@ -10,6 +10,10 @@ const {
   getActivity
 } = require("../controllers/userActivityController");
 const {
+  getRewards,
+  addReward
+} = require("../controllers/reward-controller");
+const {
   addItem,
   removeItem,
   removeAllItem,
@@ -70,6 +74,8 @@ router.get('/activity/get',getActivity)
 
 router.get("/accounts/spin",isSpinned);
 router.get("/accounts/setspin",setSpin);
+router.get("/rewards/get-rewards",getRewards);
+router.post("/rewards/add-reward",addReward);
 //Product related routes
 
 router.get("/products/get-products", getProducts);

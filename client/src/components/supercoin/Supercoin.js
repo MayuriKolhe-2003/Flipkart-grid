@@ -6,6 +6,7 @@ import { Link as RouteLink } from 'react-router-dom'
 
 import erc20abi from "../../pages/ERC20abi.json";
 import { setSpCoin } from "../../actions/userActions";
+import Reward from './Rewards';
 
 const useStyles = makeStyles((theme) => ({
     component: {
@@ -170,17 +171,7 @@ const Supercoin = () => {
 
 
 
-            <Grid container spacing={2}>
-                <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/28/06/2023/19d74555-c732-4ed4-97d7-a301b51fd797.png?q=50" alt="img 1" className={classes.image} />
-                </Grid>
-                <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/01/08/2023/a0669428-600c-4e64-aeac-2a2d0412fc42.png?q=50" alt="img 2" className={classes.image} />
-                </Grid>
-                <Grid item xs={4} className={classes.column}>
-                    <img src="https://rukminim2.flixcart.com/fk-p-www/400/400/promos/19/04/2023/16a7f155-3dd9-400e-a093-ad4344a6e7cd.png?q=50" alt="img 3" className={classes.image} />
-                </Grid>
-            </Grid>
+            <Reward />
 
 
             <div className={classes.faqContainer}>
