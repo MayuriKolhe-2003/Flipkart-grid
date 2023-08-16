@@ -33,7 +33,7 @@ function App() {
             <Route exact path="/">
               <HomePage />
             </Route>
-            <Route exact path="/login">
+            <Route exact path="/login/:id">
               <AuthPage />
             </Route>
             <Route exact path="/cart">

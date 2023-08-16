@@ -120,7 +120,7 @@ const CoinsActivity = () => {
                                     <Typography>{obj.activity}</Typography>
                                     <Typography className={obj.credited ? classes.plus : classes.minus}>{obj.credited ? "+" : "-"}{obj.coins}</Typography>
                                 </Box>
-                                <Typography className={classes.muted}>{obj.credited ? "Credited" : "Debited"} on 01 Jun 2023</Typography>
+                                <Typography className={classes.muted}>{obj.credited ? "Credited" : "Debited"} on {obj.createdAt}</Typography>
                             </div>
                             <hr className={classes.hrc} />
                         </div>

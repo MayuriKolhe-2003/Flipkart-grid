@@ -26,6 +26,7 @@ import {
 
 import useQuery from "../../hooks/useQuery";
 import { makeCapitalizeText } from "../../utils/makeCapitalizeText";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 const useStyles = makeStyles((theme) => ({
   signupInputs: {
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function SignupStep2() {
+  const {id} = useParams()
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({
     fName: "",
@@ -164,6 +166,7 @@ function SignupStep2() {
       const { isAuth, user } = await authentication();
       dispatch(setIsAuthenticate(isAuth));
       dispatch(setUserInfo(user));
+      console.log(id);
 
       setLoading(false);
 
