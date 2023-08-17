@@ -64,7 +64,7 @@ const useStyle = makeStyles({
   }
 });
 
-const CartItem = ({ item, handleCheckboxChange }) => {
+const CartItem = ({ item}) => {
   const classes = useStyle();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const finalPrice = item.price.cost - ((item.price.cost * item.price.discount) / 100);

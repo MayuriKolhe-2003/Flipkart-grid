@@ -48,11 +48,12 @@ const useStyle = makeStyles((theme) => ({
 const Cart = () => {
   const classes = useStyle();
 
-  const { cartItems } = useSelector((state) => state.cartReducer);
+  const { cartItems,checkboxValues } = useSelector((state) => state.cartReducer);
   const { isAuthenticate } = useSelector((state) => state.userReducer);
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
+  console.log(checkboxValues)
 
   useEffect(() => {
     setTimeout(() => {
@@ -62,16 +63,6 @@ const Cart = () => {
       dispatch(getCartItems());
     }
   }, [isAuthenticate]);
-
-  const [checkboxValues, setCheckboxValues] = useState({}); // Track checkbox values
-
-  const handleCheckboxChange = (_id, isChecked) => {
-    // Update the checkbox value in the state
-    setCheckboxValues(prevState => ({
-      ...prevState,
-      [_id]: isChecked
-    }));
-  };
 
 
   const placeOrder = () => {
@@ -98,7 +89,7 @@ const Cart = () => {
               </Typography>
             </Box>
             {cartItems.map((item) => (
-              <CartItem item={item} handleCheckboxChange={handleCheckboxChange}  key={item._id} />
+              <CartItem item={item}  key={item._id} />
             ))}
             <Box className={classes.bottom}>
               <Button

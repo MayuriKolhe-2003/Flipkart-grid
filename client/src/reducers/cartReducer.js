@@ -24,11 +24,16 @@ const cartReducer = (state = initialState, action) => {
       }
 
     case actionType.REMOVE_FROM_CART:
+      // Create a copy of the current checkbox values without the removed item
+      const updatedCheckboxValues = { ...state.checkboxValues };
+      delete updatedCheckboxValues[action.payload.id];
+
       return {
         ...state,
         cartItems: state.cartItems.filter(
           (product) => product._id !== action.payload.id
         ),
+        checkboxValues: updatedCheckboxValues
       };
 
     case actionType.CLEAR_CART:
@@ -53,20 +58,35 @@ const cartReducer = (state = initialState, action) => {
     case actionType.SET_CART_ITEMS:
 
       const cartItems = action.payload.cartItems;
+      const initialCheckboxValues = {};
+      if (cartItems.length > 0) {
+        cartItems.forEach(item => {
+          initialCheckboxValues[item._id] = false;
+        });
+      }
 
       return {
         ...state,
         cartItems: cartItems,
+        checkboxValues: initialCheckboxValues
       };
 
     case actionType.UPDATE_CHECKBOX_VALUES:
-      return {
-        ...state,
-        checkboxValues: {
-          ...state.checkboxValues,
-          [action.payload.itemid]: action.payload.isChecked
-        }
-      };
+      const itemId = action.payload.itemid;
+      const isChecked = action.payload.isChecked;
+
+      // Only update checkboxValues for items that are in cartItems
+      if (state.cartItems.some(item => item._id === itemId)) {
+        return {
+          ...state,
+          checkboxValues: {
+            ...state.checkboxValues,
+            [itemId]: isChecked
+          }
+        };
+      } else {
+        return state; // No change needed for items not in cartItems
+      }
 
     default:
       return state;
