@@ -4,6 +4,7 @@ const {
   getProductById,
   addProduct,
   getProductsByCategory,
+  getProductBySeller
 } = require("../controllers/product-controller");
 const {
   addActivity,
@@ -81,7 +82,8 @@ router.post("/rewards/add-reward",addReward);
 router.get("/products/get-products", getProducts);
 router.get("/products/get-products/:categoryName", getProductsByCategory);
 router.get("/products/get-product/:id", getProductById);
-router.get("/products/add-product", addProduct);
+router.post("/products/add-product", addProduct);
+router.get("/products/getProductSeller/:sellerid",getProductBySeller)
 
 //Cart related routes
 router.post("/cart/add-item", addItem);

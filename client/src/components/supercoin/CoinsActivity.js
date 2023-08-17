@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     component: {
         width: '55%',
         minWidth: 500,
-        height: '65vh',
         background: '#fff',
         margin: '80px auto',
         [theme.breakpoints.down('md')]: {

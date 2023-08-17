@@ -32,34 +32,45 @@ const useStyle = makeStyles({
   },
 });
 
-const TotalView = ({ page = "cart" }) => {
+const TotalView = ({ page = "cart"}) => {
   const classes = useStyle();
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deliveryCharges, setDeliveryCharges] = useState(0);
-  const { cartItems, stateChangeNotifyCounter } = useSelector(
+  const [coinsUsed, setCoinsUsed] = useState(0);
+
+  const { cartItems, stateChangeNotifyCounter, checkboxValues } = useSelector(
     (state) => state.cartReducer
-  );
+  ); // Retrieve checkboxValues from the Redux store
   const dispatch = useDispatch();
 
   useEffect(() => {
     totalAmount();
-  }, [cartItems, stateChangeNotifyCounter]);
+  }, [cartItems, stateChangeNotifyCounter, checkboxValues]);
 
   const totalAmount = () => {
-    let price = 0,
-      discount = 0;
-    cartItems.map((item) => {
-      price += item.price.cost * item.qty;
-      discount += (item.price.cost*item.price.discount)/100;
+    let totalPrice = 0;
+    let totalDiscount = 0;
+    let totalCoinsUsed = 0;
+
+    cartItems.forEach((item) => {
+      const itemPrice = item.price.cost * item.qty;
+      const itemDiscount = (itemPrice * item.price.discount) / 100;
+      const itemCoinsUsed = checkboxValues[item._id] ? item.price.coinsUsed : 0;
+
+      totalPrice += itemPrice;
+      totalDiscount += itemDiscount;
+      totalCoinsUsed += itemCoinsUsed;
     });
 
-    setPrice(price);
-    setDiscount(discount);
-    setDeliveryCharges(price - discount > 500 ? 0 : 40);
+    setPrice(totalPrice);
+    setDiscount(totalDiscount);
+    setCoinsUsed(totalCoinsUsed);
+
+    setDeliveryCharges(totalPrice - totalDiscount > 500 ? 0 : 40);
 
     if (page === "checkout") {
-      dispatch(setTotalAmount(price - discount + deliveryCharges));
+      dispatch(setTotalAmount(totalPrice - totalDiscount - totalCoinsUsed + deliveryCharges));
     }
   };
 
@@ -78,9 +89,16 @@ const TotalView = ({ page = "cart" }) => {
         </Typography>
         {page === "cart" && (
           <Typography>
-            Discount<span className={classes.price}>-₹{discount}</span>
+            Discount<span className={classes.price}>- ₹{discount}</span>
           </Typography>
         )}
+
+
+        <Typography>
+          Coins Discount
+          <span className={classes.price}>- {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
+        </Typography>
+
         <Typography>
           Delivery Charges
           <span className={classes.price}>
@@ -90,7 +108,7 @@ const TotalView = ({ page = "cart" }) => {
         <Typography className={classes.totalAmount}>
           {page === "checkout" ? "Total Payable" : "Total Amount"}
           <span className={classes.price}>
-            ₹{price - discount + deliveryCharges}
+            ₹{price - discount - coinsUsed + deliveryCharges}
           </span>
         </Typography>
         <Typography style={{ fontSize: 16, color: "green" }}>

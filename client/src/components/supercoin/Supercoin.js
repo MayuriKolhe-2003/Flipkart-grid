@@ -139,7 +139,7 @@ const Supercoin = () => {
             const timeDifference = currentTimeBig.minus(timeBig);
 
             if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
-                // await erc20trans.decayTokens();
+                //await erc20trans.decayTokens();
             }
         }
     }

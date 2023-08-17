@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import { isDesktop} from 'react-device-detect';
+import { isDesktop } from 'react-device-detect';
 //Custom import
 import Header from "./components/header/Header";
 
@@ -21,9 +21,11 @@ import Supercoin from "./components/supercoin/Supercoin";
 import "./App.css";
 import SpinWheel from "./components/supercoin/SpinWheel";
 import CoinsActivity from "./components/supercoin/CoinsActivity";
+import AddProduct from "./seller/components/Cards/AddProduct";
+import Products from "./seller/components/Tables/Products";
+import Wrapper from "./seller/components/Wrapper";
 
-
-function App() { 
+function App() {
   return (
     <div className="app">
       {isDesktop ? (
@@ -36,6 +38,7 @@ function App() {
             <Route exact path="/login/:id">
               <AuthPage />
             </Route>
+
             <Route exact path="/cart">
               <CartPage />
             </Route>
@@ -72,7 +75,17 @@ function App() {
             <Route exact path='/coins-activity'>
               <CoinsActivity />
             </Route>
-           
+
+            <Route exact path="/seller">
+              <Wrapper />
+            </Route>
+            <Route path="/seller/add-product">
+              <AddProduct />
+            </Route>
+            <Route path="/seller/products">
+              <Products />
+            </Route>
+
             <Route component={ErrorPage} />
           </Switch>
         </>

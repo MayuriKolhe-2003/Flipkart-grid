@@ -9,6 +9,7 @@ const productSchema = mongoose.Schema({
     mrp: Number,
     cost: Number,
     discount: Number,
+    coinsUsed:Number,
   },
   qty:Number,
   category:String,
@@ -16,6 +17,10 @@ const productSchema = mongoose.Schema({
   tagline: String,
   url: String,
   detailUrl: String,
+  seller:{
+    id:String,
+    name:String
+  }
 });
 
 const Product = new mongoose.model("product", productSchema);

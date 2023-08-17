@@ -159,9 +159,10 @@ const CheckoutPage = () => {
   const [selectedAddr, setSelectedAddr] = useState();
   const [paymentMode, setPaymentMode] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [coinsUsed, setCoinsUsed] = useState(0);
   const classes = useStyle();
 
-  const { cartItems } = useSelector((state) => state.cartReducer);
+  const { cartItems,checkboxValues } = useSelector((state) => state.cartReducer);
   const { isAuthenticate, user } = useSelector((state) => state.userReducer);
   const { addresses } = useSelector((state) => state.addressReducer);
   const { orderItems, totalAmount } = useSelector(
@@ -176,6 +177,7 @@ const CheckoutPage = () => {
     return obj.title.shortTitle;
   })
 
+
   useEffect(() => {
     //check if request from cart page or not
     if (query.get("init") != "true") {
@@ -189,6 +191,7 @@ const CheckoutPage = () => {
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
+      calcCoins();
     } else {
       history.replace("/login?ref=checkout?init=true");
     }
@@ -196,6 +199,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     dispatch(setOrderItems(cartItems));
+    calcCoins();
   }, [cartItems]);
 
   useEffect(() => {
@@ -203,6 +207,19 @@ const CheckoutPage = () => {
       window.location.replace("/");
     }
   }, []);
+
+  const calcCoins = () => {
+
+    let totalCoinsUsed = 0;
+
+    cartItems.forEach((item) => {
+      const itemCoinsUsed = checkboxValues[item._id] ? item.price.coinsUsed : 0;
+      totalCoinsUsed += itemCoinsUsed;
+    });
+    setCoinsUsed(totalCoinsUsed);
+    console.log(coinsUsed)
+
+  };
 
   const handleChange = () => {
     setActiveComponent({
@@ -239,6 +256,22 @@ const CheckoutPage = () => {
     }
   }
 
+  const deductCoinActivity = async(coin) => {
+    try {
+      await axios.post("/activity/add", {
+        userId:user._id,
+        debited:true,
+        credited:false,
+        activity:`Product purchased with Coins : ${transitems}`,
+        productname:"",
+        coins:coin
+      });
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+
   const confirmOrder = async () => {
     if (paymentMode == "cash") {
       try {
@@ -249,6 +282,7 @@ const CheckoutPage = () => {
           totalAmount: totalAmount,
           paymentMode: paymentMode,
           paymentStatus: "Completed",
+          coinsUsed : coinsUsed,
         });
         await dispatch(clearCart());
         const provider = new ethers.BrowserProvider(window.ethereum);
@@ -267,9 +301,18 @@ const CheckoutPage = () => {
           coin = Math.floor(totalAmount / 100) * 2;
         }
         console.log(signerAddress);
-        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
+        const TransferCoins = coin - coinsUsed;
+        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
+
         
         addActivity(coin).then(() => {
+          console.log("Success");
+          axios.get(`/activity/get?id=${user._id}`)
+          .then(res => {
+            console.log(res);
+          })
+        })
+        deductCoinActivity(coinsUsed).then(() => {
           console.log("Success");
           axios.get(`/activity/get?id=${user._id}`)
           .then(res => {
@@ -279,7 +322,7 @@ const CheckoutPage = () => {
         .catch((err) => {
           console.log(err);
         });
-        window.location.replace("order-success");
+        // window.location.replace("order-success");
       } catch (error) {
         console.log(error);
         window.location.replace("order-failed");
@@ -522,7 +565,7 @@ const CheckoutPage = () => {
             </Box>
           </Grid>
           <Grid item lg={4} md={4} sm={12} xs={12}>
-            <TotalView page="checkout" />
+            <TotalView page="checkout"  />
             <Box style={{ marginTop: 20 }}>
               <img style={{ width: "100%" }} src={superCoin} alt="Super Coin" />
             </Box>

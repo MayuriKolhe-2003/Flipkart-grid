@@ -48,12 +48,12 @@ const useStyle = makeStyles((theme) => ({
 const Cart = () => {
   const classes = useStyle();
 
-  const { cartItems } = useSelector((state) => state.cartReducer);
+  const { cartItems,checkboxValues } = useSelector((state) => state.cartReducer);
   const { isAuthenticate } = useSelector((state) => state.userReducer);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
+  console.log(checkboxValues)
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,7 +89,7 @@ const Cart = () => {
               </Typography>
             </Box>
             {cartItems.map((item) => (
-              <CartItem item={item}  />
+              <CartItem item={item}  key={item._id} />
             ))}
             <Box className={classes.bottom}>
               <Button
@@ -103,7 +103,7 @@ const Cart = () => {
             </Box>
           </Grid>
           <Grid item lg={3} md={3} sm={12} xs={12}>
-            <TotalView />
+            <TotalView  />
           </Grid>
         </Grid>
       ) : (

@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 function ProfileMenu({ logout }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { user } = useSelector((state) => state.userReducer);
-  console.log(user);
+  //console.log(user);
   const classes = useStyles();
   const history = useHistory();
 
