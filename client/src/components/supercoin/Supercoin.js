@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles, Typography, Box, Button, Grid, Link } from '@material-ui/core';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Link as RouteLink } from 'react-router-dom'
 
@@ -106,28 +106,43 @@ const Supercoin = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const ethers = require('ethers');
-    const { spCoin,isAuthenticate } = useSelector((state) => state.userReducer);
+    const BigNumber = require('bignumber.js');
+    const { spCoin, isAuthenticate } = useSelector((state) => state.userReducer);
     console.log(spCoin);
 
     useEffect(() => {
         getCoin()
-      }, [spCoin])
-    
-      const getCoin = async () => {
+    }, [spCoin])
+
+    const getCoin = async () => {
         if (isAuthenticate) {
-          const provider = new ethers.BrowserProvider(window.ethereum);
-          await provider.send("eth_requestAccounts", []);
-          const erc20 = new ethers.Contract("0xB1D52DA6A644789cC3144B58DC7d9cC650881783", erc20abi, provider);
-          const signer = await provider.getSigner();
-          const signerAddress = await signer.getAddress();
-          const balancewei = await erc20.balanceOf(signerAddress);
-          const balance = ethers.formatEther(balancewei, 18);
-          console.log(balance);
-          dispatch(setSpCoin(balance));
-          // setSpCoin(balance);
-    
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, provider);
+            const signer = await provider.getSigner();
+            const erc20trans = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer);
+            const signerAddress = await signer.getAddress();
+            const balancewei = await erc20.balanceOf(signerAddress);
+            const balance = ethers.formatEther(balancewei, 18);
+            console.log(balance);
+            dispatch(setSpCoin(balance));
+            // setSpCoin(balance);
+            const time = await erc20.timestamp();
+            console.log(time);
+            console.log(Math.floor(Date.now() / 1000));
+
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            const currentTimeBig = new BigNumber(currentTime);
+            const timeBig = new BigNumber(time);
+
+            const timeDifference = currentTimeBig.minus(timeBig);
+
+            if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
+                //await erc20trans.decayTokens();
+            }
         }
-      }
+    }
 
     return (
         <Box className={classes.component}>

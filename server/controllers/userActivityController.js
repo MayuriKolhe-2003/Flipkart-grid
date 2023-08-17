@@ -28,7 +28,7 @@ exports.getActivity = async(req,res)=>{
         const userId= req.query.id;
 
         try{
-                const data = await userActivity.find({userId}).sort({"createdAt": -1});
+                const data = await userActivity.find({userId}).sort({"createdAt": 1});
                 res.send(data);
         }
         catch(e)

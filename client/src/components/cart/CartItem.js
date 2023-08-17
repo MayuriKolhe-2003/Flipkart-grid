@@ -74,7 +74,7 @@ const CartItem = ({ item, handleCheckboxChange }) => {
 
   const dispatch = useDispatch();
   const { checkboxValues } = useSelector((state) => state.cartReducer);
-
+  console.log(checkboxValues)
   const isChecked = checkboxValues[item._id] || false; // Retrieve checkbox value from Redux state
 
   const handleCheck = () => {
