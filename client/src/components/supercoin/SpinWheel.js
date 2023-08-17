@@ -66,8 +66,10 @@ const SpinWheel = () => {
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
     const signerAddress = await signer.getAddress();
-    const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
-    await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", signerAddress, ethers.parseEther(selectedSection.toString()));
+    await axios.post("api/approve/add-approve", {
+      userId: signerAddress,
+      Amount: selectedSection
+    });
     addActivity(selectedSection).then(() => {
       console.log("Success");
       axios.get(`/api/activity/get?id=${user._id}`)

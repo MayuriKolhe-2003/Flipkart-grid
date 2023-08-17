@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { isDesktop} from 'react-device-detect';
 //Custom import
 import Header from "./components/header/Header";
@@ -21,14 +21,17 @@ import Supercoin from "./components/supercoin/Supercoin";
 import "./App.css";
 import SpinWheel from "./components/supercoin/SpinWheel";
 import CoinsActivity from "./components/supercoin/CoinsActivity";
+import AdminPanel from "./pages/AdminPanel";
+// import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 
 function App() { 
+  const isAdminRoute = useRouteMatch('/admin');
   return (
     <div className="app">
       {isDesktop ? (
         <>
-          <Header />
+        {!isAdminRoute && <Header />}
           <Switch>
             <Route exact path="/">
               <HomePage />
@@ -72,7 +75,9 @@ function App() {
             <Route exact path='/coins-activity'>
               <CoinsActivity />
             </Route>
-           
+            <Route exact path='/admin'>
+              <AdminPanel />
+            </Route>
             <Route component={ErrorPage} />
           </Switch>
         </>

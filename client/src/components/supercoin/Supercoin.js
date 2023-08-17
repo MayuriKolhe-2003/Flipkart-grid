@@ -118,29 +118,29 @@ const Supercoin = () => {
         if (isAuthenticate) {
             const provider = new ethers.BrowserProvider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
-            const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, provider);
+            const erc20 = new ethers.Contract("0x148c0bE313Ec6d42B23d0760D131E385C3D76D4b", erc20abi, provider);
             const signer = await provider.getSigner();
-            const erc20trans = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer);
+            const erc20trans = new ethers.Contract("0x148c0bE313Ec6d42B23d0760D131E385C3D76D4b", erc20abi, signer);
             const signerAddress = await signer.getAddress();
-            const balancewei = await erc20.balanceOf(signerAddress);
+            const balancewei = await erc20.balances(signerAddress);
             const balance = ethers.formatEther(balancewei, 18);
             console.log(balance);
             dispatch(setSpCoin(balance));
             // setSpCoin(balance);
-            const time = await erc20.timestamp();
-            console.log(time);
-            console.log(Math.floor(Date.now() / 1000));
+            // const time = await erc20.timestamp();
+            // console.log(time);
+            // console.log(Math.floor(Date.now() / 1000));
 
-            const currentTime = Math.floor(Date.now() / 1000);
+            // const currentTime = Math.floor(Date.now() / 1000);
 
-            const currentTimeBig = new BigNumber(currentTime);
-            const timeBig = new BigNumber(time);
+            // const currentTimeBig = new BigNumber(currentTime);
+            // const timeBig = new BigNumber(time);
 
-            const timeDifference = currentTimeBig.minus(timeBig);
+            // const timeDifference = currentTimeBig.minus(timeBig);
 
-            if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
-                // await erc20trans.decayTokens();
-            }
+            // if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
+            //     // await erc20trans.decayTokens();
+            // }
         }
     }
 

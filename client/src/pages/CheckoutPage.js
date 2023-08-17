@@ -240,7 +240,7 @@ const CheckoutPage = () => {
   }
 
   const confirmOrder = async () => {
-    if (paymentMode == "cash") {
+    if (paymentMode === "cash") {
       try {
         await axios.post("/orders/complete-order", {
           items: orderItems,
@@ -255,7 +255,7 @@ const CheckoutPage = () => {
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
+        // const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
         var coin = 0;
         if (totalAmount > 2500) {
           coin = 50;
@@ -266,8 +266,12 @@ const CheckoutPage = () => {
         else {
           coin = Math.floor(totalAmount / 100) * 2;
         }
-        console.log(signerAddress);
-        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
+        await axios.post("/approve/add-approve", {
+          userId: signerAddress,
+          Amount: coin
+        });
+        // console.log(signerAddress);
+        // await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
         
         addActivity(coin).then(() => {
           console.log("Success");
@@ -284,7 +288,7 @@ const CheckoutPage = () => {
         console.log(error);
         window.location.replace("order-failed");
       }
-    } else if (paymentMode == "online") {
+    } else if (paymentMode === "online") {
       try {
         const res = await axios.post("/orders/complete-order", {
           items: orderItems,
