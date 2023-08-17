@@ -248,7 +248,23 @@ const CheckoutPage = () => {
         credited:true,
         activity:`Product purchased : ${transitems}`,
         productname:"",
-        coins:coinsUsed
+        coins:coin
+      });
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+
+  const deductCoinActivity = async(coin) => {
+    try {
+      await axios.post("/activity/add", {
+        userId:user._id,
+        debited:true,
+        credited:false,
+        activity:`Product purchased with Coins : ${transitems}`,
+        productname:"",
+        coins:coin
       });
     }
     catch(e) {
@@ -285,7 +301,8 @@ const CheckoutPage = () => {
           coin = Math.floor(totalAmount / 100) * 2;
         }
         console.log(signerAddress);
-        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(coin.toString()));
+        const TransferCoins = coin - coinsUsed;
+        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
 
         
         addActivity(coin).then(() => {
@@ -295,10 +312,17 @@ const CheckoutPage = () => {
             console.log(res);
           })
         })
+        deductCoinActivity(coinsUsed).then(() => {
+          console.log("Success");
+          axios.get(`/activity/get?id=${user._id}`)
+          .then(res => {
+            console.log(res);
+          })
+        })
         .catch((err) => {
           console.log(err);
         });
-        window.location.replace("order-success");
+        // window.location.replace("order-success");
       } catch (error) {
         console.log(error);
         window.location.replace("order-failed");
