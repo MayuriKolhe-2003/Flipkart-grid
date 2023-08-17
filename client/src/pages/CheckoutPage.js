@@ -279,6 +279,7 @@ const CheckoutPage = () => {
           items: orderItems,
           userId: user._id,
           addressId: selectedAddr._id,
+          // seller:
           totalAmount: totalAmount,
           paymentMode: paymentMode,
           paymentStatus: "Completed",
@@ -322,6 +323,7 @@ const CheckoutPage = () => {
         .catch((err) => {
           console.log(err);
         });
+        console.log(cartItems);
         // window.location.replace("order-success");
       } catch (error) {
         console.log(error);

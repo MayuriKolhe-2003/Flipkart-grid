@@ -2,6 +2,7 @@ const Order = require("../models/orderSchema");
 const mongoose = require("mongoose");
 
 const completeOrder = async (req, res) => {
+  // console.log(req.body.items[0].seller);
   try {
     const order = new Order({ ...req.body, orderDate: Date.now() });
     const result = await order.save();
