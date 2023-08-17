@@ -30,6 +30,10 @@ const orderSchema = mongoose.Schema({
   transactionId: String,
   paymentStatus:String,
   orderDate: Date,
+  coinsUsed : {
+    type:Number,
+    default:0
+  }
 });
 
 const Order = new mongoose.model("order", orderSchema);

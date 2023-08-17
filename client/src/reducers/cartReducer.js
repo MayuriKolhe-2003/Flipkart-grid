@@ -3,6 +3,7 @@ import * as actionType from "../action-type/cartActionType";
 const initialState = {
   cartItems: [],
   stateChangeNotifyCounter: 1,
+  checkBoxValues: {}
 };
 
 const cartReducer = (state = initialState, action) => {
@@ -50,10 +51,23 @@ const cartReducer = (state = initialState, action) => {
         stateChangeNotifyCounter: state.stateChangeNotifyCounter + 1,
       };
     case actionType.SET_CART_ITEMS:
+
+      const cartItems = action.payload.cartItems;
+
       return {
         ...state,
-        cartItems: action.payload.cartItems,
+        cartItems: cartItems,
       };
+
+    case actionType.UPDATE_CHECKBOX_VALUES:
+      return {
+        ...state,
+        checkboxValues: {
+          ...state.checkboxValues,
+          [action.payload.itemid]: action.payload.isChecked
+        }
+      };
+
     default:
       return state;
   }

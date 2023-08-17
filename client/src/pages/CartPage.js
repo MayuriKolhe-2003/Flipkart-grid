@@ -50,7 +50,6 @@ const Cart = () => {
 
   const { cartItems } = useSelector((state) => state.cartReducer);
   const { isAuthenticate } = useSelector((state) => state.userReducer);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -63,6 +62,16 @@ const Cart = () => {
       dispatch(getCartItems());
     }
   }, [isAuthenticate]);
+
+  const [checkboxValues, setCheckboxValues] = useState({}); // Track checkbox values
+
+  const handleCheckboxChange = (_id, isChecked) => {
+    // Update the checkbox value in the state
+    setCheckboxValues(prevState => ({
+      ...prevState,
+      [_id]: isChecked
+    }));
+  };
 
 
   const placeOrder = () => {
@@ -89,7 +98,7 @@ const Cart = () => {
               </Typography>
             </Box>
             {cartItems.map((item) => (
-              <CartItem item={item}  />
+              <CartItem item={item} handleCheckboxChange={handleCheckboxChange}  key={item._id} />
             ))}
             <Box className={classes.bottom}>
               <Button
@@ -103,7 +112,7 @@ const Cart = () => {
             </Box>
           </Grid>
           <Grid item lg={3} md={3} sm={12} xs={12}>
-            <TotalView />
+            <TotalView checkboxValues={checkboxValues} />
           </Grid>
         </Grid>
       ) : (

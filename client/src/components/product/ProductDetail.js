@@ -89,7 +89,7 @@ const ProductDetail = ({ product }) => {
           <TableRow className={classes.smallText}>
             <TableCell className={classes.greyTextColor}>Seller</TableCell>
             <TableCell className={clsx(classes.smallText, classes.borderNone)}>
-              <span style={{ color: "#2874f0" }}>SuperComNet</span>
+              <span style={{ color: "#2874f0" }}>{product.seller? product.seller.name : "Flipkart"}</span>
               <Typography>GST invoice available</Typography>
               <Typography>View more sellers starting from ₹329</Typography>
             </TableCell>

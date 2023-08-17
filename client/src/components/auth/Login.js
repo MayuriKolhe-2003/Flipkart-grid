@@ -204,7 +204,11 @@ function Login() {
           let routeString = query.get("ref");
           history.replace(`/${routeString}`);
         } else {
-          history.replace("/");
+          if (user.tag === "seller") {
+            history.replace("/seller"); // Redirect to seller page
+          } else {
+            history.replace("/"); // Redirect to user page
+          }
         }
       }
     } catch (error) {

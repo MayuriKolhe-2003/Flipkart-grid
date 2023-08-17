@@ -37,6 +37,17 @@ const getProductById = async (req, res) => {
   }
 };
 
+const getProductBySeller = async (req, res) => {
+  const sellerID = req.params.sellerid;
+  //console.log(sellerID)
+  try {
+    const result = await Product.find({"seller.id": sellerID});
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
 const addProduct = async (req, res) => {
   const productData = req.body;
   try {
@@ -55,4 +66,5 @@ module.exports = {
   getProductsByCategory,
   getProductById,
   addProduct,
+  getProductBySeller
 };

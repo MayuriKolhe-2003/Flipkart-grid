@@ -86,10 +86,19 @@ function OrderRow({ order }) {
                 </Typography>
               </Link>
             </Grid>
-            <Grid item lg={2} md={2} sm={3} xs={4} className={classes.centerItems}>
+            <Grid item lg={1} md={1} sm={3} xs={4} className={classes.centerItems}>
               {/* Price */}
-              <span className={classes.price}>₹{item.price}</span>
+              <span className={classes.price}>₹{order.totalAmount}</span>
             </Grid>
+            <Grid item lg={1} md={1} sm={3} xs={4} className={classes.centerItems}>
+              {/* Price */}
+              <span className={classes.price}>
+                {order.coinsUsed}
+                <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" style={{width:19,height:19,marginLeft:3}} />
+                </span>
+
+            </Grid>
+
             <Grid item lg={2} md={2} sm={3} xs={12} className={classes.paymentDetails}>
               {/* Payment Mode */}
               <Typography className={classes.text}>

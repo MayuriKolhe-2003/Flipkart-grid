@@ -102,3 +102,10 @@ export const updateQty = (productId, qty) => {
     },
   };
 };
+
+export const updateCheckboxValues = (itemid, isChecked) => {
+  return {
+    type: actionType.UPDATE_CHECKBOX_VALUES,
+    payload: { itemid, isChecked }
+  };
+};
