@@ -26,4 +26,17 @@ const addRequest = async (req, res) => {
 
 }
 
-module.exports = { getBrandRequest, addRequest }
+const delRequest = async (req, res) => {
+    try {
+        const itemId = req.params.id;
+        console.log(itemId);
+        await brandrequest.deleteOne({ _id: itemId });
+        res.send("Success");
+    }
+    catch (err) {
+        console.log(err);
+        res.send("Unable to delete");
+    }
+}
+
+module.exports = { getBrandRequest, addRequest, delRequest }

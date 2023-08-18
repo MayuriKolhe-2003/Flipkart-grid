@@ -27,6 +27,7 @@ import {
 import useQuery from "../../hooks/useQuery";
 import { makeCapitalizeText } from "../../utils/makeCapitalizeText";
 import { useParams } from "react-router-dom";
+import { ethers } from "ethers";
 
 const useStyles = makeStyles((theme) => ({
   signupInputs: {
@@ -75,6 +76,7 @@ function SignupStep2(props) {
   const [submitCount, setSubmitCount] = useState(0);
   const initial = useRef(true);
   const { phoneNumber, popupLogin } = useSelector((state) => state.userReducer);
+  const erc20abi = require('../../pages/ERC20abi.json')
 
   useEffect(() => {
     if (initial.current === true) {
@@ -169,7 +171,24 @@ function SignupStep2(props) {
       dispatch(setIsAuthenticate(isAuth));
       dispatch(setUserInfo(user));
      if(id){
-
+      console.log(id);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = await provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      await axios.post("approve/add-approve", {
+        userId: signerAddress,
+        Amount: 3,
+        userId2: id,
+        Amount2: 5,
+        isMultiple: true
+      })
+      .then(() => {
+        console.log("Referral Successful");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
      }else{
       console.log("not referred");
      }

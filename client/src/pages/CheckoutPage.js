@@ -18,7 +18,7 @@ import axios from "../adapters/axios";
 import { clearCart, getCartItems } from "../actions/cartActions";
 import { getAddresses } from "../actions/addressActions";
 import { setOrderItems } from "../actions/orderActions";
-import {resetCheckboxValues} from "../actions/cartActions";
+import { resetCheckboxValues } from "../actions/cartActions";
 
 
 import { shieldIcon, superCoin } from "../constants/data";
@@ -167,7 +167,7 @@ const CheckoutPage = () => {
   const [purchaseCoins, setpurchaseCoins] = useState(coinsUsed);
   const classes = useStyle();
 
-  const { cartItems,checkboxValues } = useSelector((state) => state.cartReducer);
+  const { cartItems, checkboxValues } = useSelector((state) => state.cartReducer);
   const { isAuthenticate, user } = useSelector((state) => state.userReducer);
   const { addresses } = useSelector((state) => state.addressReducer);
   const { orderItems, totalAmount } = useSelector(
@@ -187,7 +187,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     //check if request from cart page or not
-    if (query.get("init") != "true") {
+    if (query.get("init") !== "true") {
       history.replace("/cart");
     }
 
@@ -215,7 +215,7 @@ const CheckoutPage = () => {
     }
   }, []);
 
-  
+
 
   const handleChange = () => {
     setActiveComponent({
@@ -236,40 +236,40 @@ const CheckoutPage = () => {
     setPaymentMode(e.target.value);
   };
 
-  const addActivity = async(coin) => {
+  const addActivity = async (coin) => {
     try {
       await axios.post("/activity/add", {
-        userId:user._id,
-        debited:false,
-        credited:true,
-        activity:`Product purchased : ${transitems}`,
-        productname:"",
-        coins:coin
+        userId: user._id,
+        debited: false,
+        credited: true,
+        activity: `Product purchased : ${transitems}`,
+        productname: "",
+        coins: coin
       });
     }
-    catch(e) {
+    catch (e) {
       console.log(e);
     }
   }
 
-  const deductCoinActivity = async(coin) => {
+  const deductCoinActivity = async (coin) => {
     try {
       await axios.post("/activity/add", {
-        userId:user._id,
-        debited:true,
-        credited:false,
-        activity:`Product purchased with Coins : ${transitems}`,
-        productname:"",
-        coins:coin
+        userId: user._id,
+        debited: true,
+        credited: false,
+        activity: `Product purchased with Coins : ${transitems}`,
+        productname: "",
+        coins: coin
       });
     }
-    catch(e) {
+    catch (e) {
       console.log(e);
     }
   }
 
   const confirmOrder = async () => {
-    if (paymentMode == "cash") {
+    if (paymentMode === "cash") {
       try {
         await axios.post("/orders/complete-order", {
           items: orderItems,
@@ -278,15 +278,15 @@ const CheckoutPage = () => {
           totalAmount: totalAmount,
           paymentMode: paymentMode,
           paymentStatus: "Completed",
-          coinsUsed : coinsUsed,
+          coinsUsed: coinsUsed,
         });
         await dispatch(clearCart());
-         //await dispatch(resetCheckboxValues());
+        //await dispatch(resetCheckboxValues());
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        //const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
+        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer)
 
         var coin = 0;
         if (totalAmount > 2500) {
@@ -298,40 +298,49 @@ const CheckoutPage = () => {
         else {
           coin = Math.floor(totalAmount / 100) * 2;
         }
+        const TransferCoins = coin - coinsUsed;
+        // console.log(coinsUsed);
 
-        await axios.post("/approve/add-approve", {
-          userId: signerAddress,
-          Amount: coin
-        });
+        if (TransferCoins > 0) {
+          await axios.post("/approve/add-approve", {
+            userId: signerAddress,
+            Amount: TransferCoins
+          });
+        }
+        else if (TransferCoins < 0) {
+          await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(Math.abs(TransferCoins).toString()));
+        }
 
         //console.log(signerAddress);
-        const TransferCoins = coin - purchaseCoins;
+
         //await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
 
-        
+
         addActivity(coin).then(() => {
           console.log("Success");
           axios.get(`/activity/get?id=${user._id}`)
-          .then(res => {
-            console.log(res);
-          })
+            .then(res => {
+              console.log(res);
+            })
         })
-        deductCoinActivity(purchaseCoins).then(() => {
+        deductCoinActivity(coinsUsed).then(() => {
           console.log("Success");
           axios.get(`/activity/get?id=${user._id}`)
-          .then(res => {
-            console.log(res);
-          })
+            .then(res => {
+              console.log(res);
+            }
+          )
         })
-        .catch((err) => {
-          console.log(err);
-        });
-         window.location.replace("order-success");
+          .catch((err) => {
+            console.log(err);
+          });
+
+        window.location.replace("order-success");
       } catch (error) {
         console.log(error);
         window.location.replace("order-failed");
       }
-    } else if (paymentMode == "online") {
+    } else if (paymentMode === "online") {
       try {
         const res = await axios.post("/orders/complete-order", {
           items: orderItems,
@@ -569,7 +578,7 @@ const CheckoutPage = () => {
             </Box>
           </Grid>
           <Grid item lg={4} md={4} sm={12} xs={12}>
-            <TotalView page="checkout"  />
+            <TotalView page="checkout" />
             <Box style={{ marginTop: 20 }}>
               <img style={{ width: "100%" }} src={superCoin} alt="Super Coin" />
             </Box>

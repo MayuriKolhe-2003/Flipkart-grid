@@ -90,7 +90,7 @@ const CoinsActivity = () => {
                 <Typography variant="h6">Supercoin Balance</Typography>
                 <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" />
                 <Typography variant="h6">
-                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{spCoin}</span>
+                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{Math.floor(spCoin)}</span>
                 </Typography>
             </Box>
 

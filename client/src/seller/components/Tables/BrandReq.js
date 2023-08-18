@@ -6,7 +6,7 @@ import SideBar from "../SideBar";
 import axios from "../../../adapters/axios";
 
 const BrandReq = () => {
-    const { isAuthenticate ,user} = useSelector((state) => state.userReducer);
+    const { user} = useSelector((state) => state.userReducer);
     const [tableRowsData, settableRowsData] = useState([]);
 
     useEffect(() => {

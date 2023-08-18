@@ -121,7 +121,7 @@ const Supercoin = () => {
 
             const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, provider);
             const signer = await provider.getSigner();
-            const erc20trans = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
+            // const erc20trans = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
             
             const signerAddress = await signer.getAddress();
             const balancewei = await erc20.balances(signerAddress);
@@ -169,7 +169,7 @@ const Supercoin = () => {
                 <Typography variant="h5">Supercoin Balance</Typography>
                 <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" />
                 <Typography variant="h6">
-                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{spCoin}</span>
+                    <span style={{ color: '#0000AA', fontWeight: 'bold', margin: '0 10px' }}>{Math.floor(spCoin)}</span>
                 </Typography>
             </Box>
 

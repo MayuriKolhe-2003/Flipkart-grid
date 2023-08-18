@@ -63,7 +63,7 @@ const {
 
 const { isSpinned, setSpin } = require("../controllers/spinController");
 const {addChallange,getChallange,getBrandsInfo,resetBrand} = require("../controllers/challange-controller")
-const{getBrandRequest,addRequest} = require("../controllers/brand-request-controller");
+const{getBrandRequest,addRequest,delRequest} = require("../controllers/brand-request-controller");
 
 const router = express.Router();
 
@@ -102,6 +102,7 @@ router.get('/brand/getinfo',getBrandsInfo);
 router.get('/brand/reset',resetBrand); 
 router.get('/seller/getbrandreq',getBrandRequest);
 router.post('/seller/addbrand',addRequest);
+router.delete('/seller/delbrand/:id',delRequest);
 
 //Cart related routes
 router.post("/cart/add-item", addItem);
