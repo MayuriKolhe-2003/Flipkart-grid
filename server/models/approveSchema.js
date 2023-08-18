@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const User = require('./userSchema');
-
 const approve = mongoose.Schema({
     userId: {
         type : String,
@@ -11,7 +9,13 @@ const approve = mongoose.Schema({
         type: Number,
         required: true,
     },
-    isApproved: {
+    userId2: {
+        type : String
+    },
+    Amount2: {
+        type: Number
+    },
+    isMultiple: {
         type: Boolean,
         default: false
     }

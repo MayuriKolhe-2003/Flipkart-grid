@@ -39,6 +39,7 @@ const TotalView = ({ page = "cart"}) => {
   const [deliveryCharges, setDeliveryCharges] = useState(0);
   const [coinsUsed, setCoinsUsed] = useState(0);
   const [isChecked,setChecked] = useState(true);
+  const { spCoin, user } = useSelector((state) => state.userReducer);
 
   const { cartItems, stateChangeNotifyCounter, checkboxValues } = useSelector(
     (state) => state.cartReducer
@@ -106,11 +107,12 @@ const TotalView = ({ page = "cart"}) => {
         )}
 
 
-        <Typography>
+       
+       {spCoin >= coinsUsed ?  <Typography>
         <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
           Coins Discount
           <span className={classes.price}> - {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
-        </Typography>
+        </Typography>:""}
 
         <Typography>
           Delivery Charges

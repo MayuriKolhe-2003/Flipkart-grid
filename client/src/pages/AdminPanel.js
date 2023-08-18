@@ -30,7 +30,7 @@ export default function AdminPanel() {
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, provider);
+        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, provider);
         setTotalSupply(await erc20.totalSupply());
         if (signerAddress !== "0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a") {
             setShowDialog(true);
@@ -55,7 +55,7 @@ export default function AdminPanel() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
-        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
+        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
 
         await erc20.mint(mntCoin);
 
@@ -68,18 +68,28 @@ export default function AdminPanel() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
-        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
+        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
 
-
-        await erc20.transfer(transaction.userId, ethers.parseEther(transaction.Amount.toString()))
-            .then(async () => {
-                console.log("Success");
-                await axios.delete(`/api/approve/del-approve/${transaction._id}`)
-                handleData();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        !transaction.isMultiple ?
+            await erc20.transfer(transaction.userId, ethers.parseEther(transaction.Amount.toString()))
+                .then(async () => {
+                    console.log("Success");
+                    await axios.delete(`/api/approve/del-approve/${transaction._id}`)
+                    handleData();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            :
+            await erc20.performTwoTransactions(transaction.userId, ethers.parseEther(transaction.Amount.toString()), transaction.userId2, ethers.parseEther(transaction.Amount2.toString()))
+                .then(async () => {
+                    console.log("Success");
+                    await axios.delete(`/api/approve/del-approve/${transaction._id}`)
+                    handleData();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         // console.log(`Transaction ${transactionId} approved`);
     };
     return (
@@ -92,9 +102,9 @@ export default function AdminPanel() {
                     </>
                 )}
                 <Box sx={{ mt: 5 }}>
-                <div>
-                    {totalSupply}
-                </div>
+                    <div>
+                        {totalSupply}
+                    </div>
                     <Typography variant="h4" align="center" gutterBottom>
                         Admin Panel
                     </Typography>
@@ -147,10 +157,16 @@ export default function AdminPanel() {
                 <List>
                     {transactions.map((transaction) => (
                         <ListItem key={transaction._id}>
-                            <ListItemText
-                                primary={`From: ${transaction.userId}`}
-                                secondary={`Amount: ${transaction.Amount}`}
-                            />
+                            {!transaction.isMultiple ?
+                                <ListItemText
+                                    primary={`From: ${transaction.userId}`}
+                                    secondary={`Amount: ${transaction.Amount}`}
+                                />
+                                :
+                                <ListItemText
+                                    primary={`From: ${transaction.userId} | To: ${transaction.userId2}`}
+                                    secondary={`Amount 1: ${transaction.Amount} | Amount 2: ${transaction.Amount2}`}
+                                />}
                             <Button
                                 variant="outlined"
                                 color="primary"

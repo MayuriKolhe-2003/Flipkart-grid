@@ -26,7 +26,7 @@ exports.deleteApproval = async (req, res) => {
     try {
         const itemId = req.params.id;
         // console.log(itemId);
-        await approval.deleteOne({_id:itemId});
+        await approval.deleteOne({ _id: itemId });
         res.send("Success");
     }
     catch (err) {

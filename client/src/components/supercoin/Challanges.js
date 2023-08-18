@@ -97,8 +97,8 @@ const Challanges = () => {
     const fetchuserbrand = async () => {
         try {
 
-            const uid = "64da2f56b0f58304aba7cbf0";
-            const response1 = await axios.get(`/brand/getinfo?id=${uid}`);
+            // const uid = "64da2f56b0f58304aba7cbf0";
+            const response1 = await axios.get(`/brand/getinfo?id=${user._id}`);
             const data = response1.data;
             setuserChallege(data);
             console.log(userChallenge)
@@ -177,7 +177,7 @@ const Challanges = () => {
                                                 </span>
                                             </Typography>
 
-                                            {brandEntry && brandEntry.qty == brand.transactionsRequired ?
+                                            {brandEntry && brandEntry.qty >= brand.transactionsRequired ?
                                                 <Button variant="contained" className={classes.claimButton} onClick={() => claimreward(brandIdToFind, brand.coinsRewarded)} >
                                                     Claim Reward
                                                 </Button>
