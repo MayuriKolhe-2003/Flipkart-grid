@@ -9,12 +9,12 @@ export default function AdminPanel() {
     const [recipient, setRecipient] = useState('');
     const [amount, setAmount] = useState('');
     const [showDialog, setShowDialog] = useState(false);
-    
+    const [mntCoin, setMntCoin] = useState('');
+    const [totalSupply, setTotalSupply] = useState(0)
 
-    const isConditionMet = true;
 
     const handleTransfer = async () => {
-        
+
     };
 
     const [transactions, setTransactions] = useState([]);
@@ -25,12 +25,14 @@ export default function AdminPanel() {
                 setTransactions(res.data);
                 console.log(res.data);
             }
-        )
+            )
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        if (signerAddress !== "0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a"){
+        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, provider);
+        setTotalSupply(await erc20.totalSupply());
+        if (signerAddress !== "0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a") {
             setShowDialog(true);
         }
     }
@@ -49,6 +51,16 @@ export default function AdminPanel() {
         );
     }
 
+    const handleMint = async () => {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
+
+        await erc20.mint(mntCoin);
+
+        // console.log(`Minting ${amount} tokens to ${recipient}`);
+    };
 
     const handleApprove = async (transaction) => {
         // Implement your approval logic here
@@ -56,7 +68,9 @@ export default function AdminPanel() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
-        const erc20 = new ethers.Contract("0x148c0bE313Ec6d42B23d0760D131E385C3D76D4b", erc20abi, signer);
+        const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
+
+
         await erc20.transfer(transaction.userId, ethers.parseEther(transaction.Amount.toString()))
             .then(async () => {
                 console.log("Success");
@@ -78,6 +92,9 @@ export default function AdminPanel() {
                     </>
                 )}
                 <Box sx={{ mt: 5 }}>
+                <div>
+                    {totalSupply}
+                </div>
                     <Typography variant="h4" align="center" gutterBottom>
                         Admin Panel
                     </Typography>
@@ -103,6 +120,27 @@ export default function AdminPanel() {
                     </form>
                 </Box>
 
+                <Box sx={{ mt: 5 }}>
+                    <Typography variant="h4" align="center" gutterBottom>
+                        Mint Tokens
+                    </Typography>
+                    <div>
+                        <TextField
+                            label="Amount"
+                            fullWidth
+                            value={mntCoin}
+                            onChange={(e) => setMntCoin(e.target.value)}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleMint}
+                        >
+                            Mint Tokens
+                        </Button>
+                    </div>
+                </Box>
+
                 <Typography variant="h4" align="center" gutterBottom>
                     Approvals
                 </Typography>
@@ -123,6 +161,7 @@ export default function AdminPanel() {
                         </ListItem>
                     ))}
                 </List>
+
             </Container>
         </div>
     )

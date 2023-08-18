@@ -74,7 +74,7 @@ const RewardsModal = ({ item, open, handleClose, spCoin }) => {
     const provider = new ethers.BrowserProvider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
-    const erc20 = new ethers.Contract("0x148c0bE313Ec6d42B23d0760D131E385C3D76D4b", erc20abi, signer);
+    const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
     await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString()));
     addActivity();
     handleClose();
