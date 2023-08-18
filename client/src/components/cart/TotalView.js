@@ -32,14 +32,16 @@ const useStyle = makeStyles({
   },
 });
 
+export var coinsUsed = 0;
+
 const TotalView = ({ page = "cart"}) => {
   const classes = useStyle();
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deliveryCharges, setDeliveryCharges] = useState(0);
-  const [coinsUsed, setCoinsUsed] = useState(0);
+  
   const [isChecked,setChecked] = useState(true);
-  const { spCoin, user } = useSelector((state) => state.userReducer);
+  const { spCoin, isAuthenticate } = useSelector((state) => state.userReducer);
 
   const { cartItems, stateChangeNotifyCounter, checkboxValues } = useSelector(
     (state) => state.cartReducer
@@ -65,11 +67,11 @@ const TotalView = ({ page = "cart"}) => {
       const itemPrice = item.price.cost * item.qty;
       const itemDiscount = (itemPrice * item.price.discount) / 100;
 
-      console.log(item);
-      console.log(item.price.coinsUsed);
-      console.log(isChecked);
+      //console.log(item);
+      //console.log(item.price.coinsUsed);
+      //console.log(isChecked);
       const itemCoinsUsed = isChecked ? item.price.coinsUsed : 0;
-      console.log(itemCoinsUsed)
+      //console.log(itemCoinsUsed)
 
       totalPrice += itemPrice;
       totalDiscount += itemDiscount;
@@ -78,7 +80,8 @@ const TotalView = ({ page = "cart"}) => {
 
     setPrice(totalPrice);
     setDiscount(totalDiscount);
-    setCoinsUsed(totalCoinsUsed);
+    coinsUsed = (totalCoinsUsed <= spCoin ? totalCoinsUsed : 0) ;
+    console.log(coinsUsed);
 
     setDeliveryCharges(totalPrice - totalDiscount > 500 ? 0 : 40);
 
@@ -107,12 +110,14 @@ const TotalView = ({ page = "cart"}) => {
         )}
 
 
-       
-       {spCoin >= coinsUsed ?  <Typography>
+        { spCoin >= coinsUsed ? 
+          <Typography>
         <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
           Coins Discount
           <span className={classes.price}> - {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
-        </Typography>:""}
+        </Typography> 
+        : ""  
+      }
 
         <Typography>
           Delivery Charges
@@ -135,3 +140,4 @@ const TotalView = ({ page = "cart"}) => {
 };
 
 export default TotalView;
+
