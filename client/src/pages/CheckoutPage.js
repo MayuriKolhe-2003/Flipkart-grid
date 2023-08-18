@@ -18,18 +18,20 @@ import axios from "../adapters/axios";
 import { clearCart, getCartItems } from "../actions/cartActions";
 import { getAddresses } from "../actions/addressActions";
 import { setOrderItems } from "../actions/orderActions";
-import { resetCheckboxValues } from "../actions/cartActions"
+import {resetCheckboxValues} from "../actions/cartActions";
+
 
 import { shieldIcon, superCoin } from "../constants/data";
 import { post } from "../utils/paytm";
 import useQuery from "../hooks/useQuery";
 
-import TotalView from "../components/cart/TotalView";
 import AddressCard from "../components/address/AddressCard";
 import LoaderSpinner from "../components/LoaderSpinner";
 import ToastMessageContainer from "../components/ToastMessageContainer";
 
 import erc20abi from "./ERC20abi.json";
+import TotalView from "../components/cart/TotalView";
+import { coinsUsed } from "../components/cart/TotalView";
 
 const useStyle = makeStyles((theme) => ({
   component: {
@@ -160,10 +162,12 @@ const CheckoutPage = () => {
   const [selectedAddr, setSelectedAddr] = useState();
   const [paymentMode, setPaymentMode] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [coinsUsed, setCoinsUsed] = useState(0);
+
+  console.log(coinsUsed);
+  const [purchaseCoins, setpurchaseCoins] = useState(coinsUsed);
   const classes = useStyle();
 
-  const { cartItems, checkboxValues } = useSelector((state) => state.cartReducer);
+  const { cartItems,checkboxValues } = useSelector((state) => state.cartReducer);
   const { isAuthenticate, user } = useSelector((state) => state.userReducer);
   const { addresses } = useSelector((state) => state.addressReducer);
   const { orderItems, totalAmount } = useSelector(
@@ -211,18 +215,7 @@ const CheckoutPage = () => {
     }
   }, []);
 
-  const calcCoins = () => {
-
-    let totalCoinsUsed = 0;
-
-    cartItems.forEach((item) => {
-      const itemCoinsUsed = checkboxValues[item._id] ? item.price.coinsUsed : 0;
-      totalCoinsUsed += itemCoinsUsed;
-    });
-    setCoinsUsed(totalCoinsUsed);
-    console.log(coinsUsed)
-
-  };
+  
 
   const handleChange = () => {
     setActiveComponent({
@@ -243,34 +236,34 @@ const CheckoutPage = () => {
     setPaymentMode(e.target.value);
   };
 
-  const addActivity = async (coin) => {
+  const addActivity = async(coin) => {
     try {
       await axios.post("/activity/add", {
-        userId: user._id,
-        debited: false,
-        credited: true,
-        activity: `Product purchased : ${transitems}`,
-        productname: "",
-        coins: coin
+        userId:user._id,
+        debited:false,
+        credited:true,
+        activity:`Product purchased : ${transitems}`,
+        productname:"",
+        coins:coin
       });
     }
-    catch (e) {
+    catch(e) {
       console.log(e);
     }
   }
 
-  const deductCoinActivity = async (coin) => {
+  const deductCoinActivity = async(coin) => {
     try {
       await axios.post("/activity/add", {
-        userId: user._id,
-        debited: true,
-        credited: false,
-        activity: `Product purchased with Coins : ${transitems}`,
-        productname: "",
-        coins: coin
+        userId:user._id,
+        debited:true,
+        credited:false,
+        activity:`Product purchased with Coins : ${transitems}`,
+        productname:"",
+        coins:coin
       });
     }
-    catch (e) {
+    catch(e) {
       console.log(e);
     }
   }
@@ -285,10 +278,10 @@ const CheckoutPage = () => {
           totalAmount: totalAmount,
           paymentMode: paymentMode,
           paymentStatus: "Completed",
-          coinsUsed: coinsUsed,
+          coinsUsed : coinsUsed,
         });
         await dispatch(clearCart());
-        //await dispatch(resetCheckboxValues());
+         //await dispatch(resetCheckboxValues());
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
@@ -312,33 +305,33 @@ const CheckoutPage = () => {
         });
 
         //console.log(signerAddress);
-        const TransferCoins = coin - coinsUsed;
+        const TransferCoins = coin - purchaseCoins;
         //await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
 
-
+        
         addActivity(coin).then(() => {
           console.log("Success");
           axios.get(`/activity/get?id=${user._id}`)
-            .then(res => {
-              console.log(res);
-            })
+          .then(res => {
+            console.log(res);
+          })
         })
-        deductCoinActivity(coinsUsed).then(() => {
+        deductCoinActivity(purchaseCoins).then(() => {
           console.log("Success");
           axios.get(`/activity/get?id=${user._id}`)
-            .then(res => {
-              console.log(res);
-            })
+          .then(res => {
+            console.log(res);
+          })
         })
-          .catch((err) => {
-            console.log(err);
-          });
-        window.location.replace("order-success");
+        .catch((err) => {
+          console.log(err);
+        });
+         window.location.replace("order-success");
       } catch (error) {
         console.log(error);
         window.location.replace("order-failed");
       }
-    } else if (paymentMode === "online") {
+    } else if (paymentMode == "online") {
       try {
         const res = await axios.post("/orders/complete-order", {
           items: orderItems,
@@ -576,7 +569,7 @@ const CheckoutPage = () => {
             </Box>
           </Grid>
           <Grid item lg={4} md={4} sm={12} xs={12}>
-            <TotalView page="checkout" />
+            <TotalView page="checkout"  />
             <Box style={{ marginTop: 20 }}>
               <img style={{ width: "100%" }} src={superCoin} alt="Super Coin" />
             </Box>
