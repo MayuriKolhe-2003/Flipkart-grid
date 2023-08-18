@@ -53,6 +53,14 @@ const {
   paytmGatway,
   paytmDataResponse,
 } = require("../controllers/payment-controller");
+
+const {
+  addApproval,
+  getApprovals,
+  deleteApproval
+} = require("../controllers/approve-controller")
+
+
 const { isSpinned, setSpin } = require("../controllers/spinController");
 const {addChallange,getChallange,getBrandsInfo,resetBrand} = require("../controllers/challange-controller")
 const{getBrandRequest,addRequest} = require("../controllers/brand-request-controller");
@@ -119,5 +127,9 @@ router.post("/orders/get-order-details", getOrderDetails);
 //Payment related routes
 router.post("/payment/paytm", paytmGatway);
 router.post("/payment/paytmresponse", paytmDataResponse);
+
+router.post("/approve/add-approve", addApproval);
+router.get("/approve/get-approve", getApprovals);
+router.delete("/approve/del-approve/:id", deleteApproval);
 
 module.exports = router;

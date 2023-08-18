@@ -118,47 +118,50 @@ const Supercoin = () => {
         if (isAuthenticate) {
             const provider = new ethers.BrowserProvider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
-            const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, provider);
+
+            const erc20 = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, provider);
             const signer = await provider.getSigner();
-            const erc20trans = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer);
+            const erc20trans = new ethers.Contract("0x1A6A811dcD676888195a12f4d027AA7e600e3C69", erc20abi, signer);
+            
             const signerAddress = await signer.getAddress();
-            const balancewei = await erc20.balanceOf(signerAddress);
+            const balancewei = await erc20.balances(signerAddress);
             const balance = ethers.formatEther(balancewei, 18);
             console.log(balance);
             dispatch(setSpCoin(balance));
+            setSpCoin(balance);
             // setSpCoin(balance);
-            const time = await erc20.timestamp();
-            console.log(time);
-            console.log(Math.floor(Date.now() / 1000));
+            // const time = await erc20.timestamp();
+            // console.log(time);
+            // console.log(Math.floor(Date.now() / 1000));
 
-            const currentTime = Math.floor(Date.now() / 1000);
+            // const currentTime = Math.floor(Date.now() / 1000);
 
-            const currentTimeBig = new BigNumber(currentTime);
-            const timeBig = new BigNumber(time);
+            // const currentTimeBig = new BigNumber(currentTime);
+            // const timeBig = new BigNumber(time);
 
-            const timeDifference = currentTimeBig.minus(timeBig);
+            // const timeDifference = currentTimeBig.minus(timeBig);
 
-            if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
-                //await erc20trans.decayTokens();
-            }
+            // if (timeDifference.isGreaterThan(30) && spCoin !== 0) {
+            //     // await erc20trans.decayTokens();
+            // }
         }
     }
 
-    const getreferalkey = async()=>{
+    const getreferalkey = async () => {
         console.log("ref");
         const provider = new ethers.BrowserProvider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                const signer = await provider.getSigner();
-                const signerAddress = await signer.getAddress();
-    
-                const encoded = btoa(signerAddress);
-                
-                const link = `http://localhost:3000/login/${encoded}`;
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const signerAddress = await signer.getAddress();
 
-                navigator.clipboard.writeText(link);
-                console.log(link);
-    
-      }
+        const encoded = btoa(signerAddress);
+
+        const link = `http://localhost:3000/login/${encoded}`;
+
+        navigator.clipboard.writeText(link);
+        console.log(link);
+
+    }
 
     return (
         <Box className={classes.component}>
@@ -175,19 +178,15 @@ const Supercoin = () => {
                     View Coin Activity
                 </Button>
             </Link>
-            <br />
-            
+
             <Link to='/challanges' component={RouteLink}>
-                <Button className={classes.button} startIcon={<DashboardIcon >history</DashboardIcon>}>
+                <Button className={classes.button} startIcon={<DashboardIcon >history</DashboardIcon>} style={{ marginLeft: '400px' }}>
                     View Challanges
                 </Button>
-            </Link>
 
-            
-                <Button className={classes.button} onClick={getreferalkey}>
-                    Refer A Friend
-                </Button>
-            
+            </Link>
+            <br></br>
+
             <br />
 
             <Box className={classes.imageContainer}>
@@ -197,14 +196,9 @@ const Supercoin = () => {
                     className={classes.image}
                 />
 
-                <Link to='/challanges'>
-                <img
-                    src="https://www.shutterstock.com/image-vector/challenge-sign-icon-lettering-banner-260nw-679938139.jpg"
-                    alt="img"
-                    className={classes.image}
-                    style={{ marginTop: '20px',height:150 }}
-                />
-                </Link>
+                <Button className={classes.button} onClick={getreferalkey}>
+                    Refer A Friend
+                </Button>
             </Box>
 
             <div className={classes.rewardsSection}>
