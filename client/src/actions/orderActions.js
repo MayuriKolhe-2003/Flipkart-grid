@@ -9,6 +9,10 @@ export const setOrderItems = (cartItems) => {
         productId: item._id,
         qty: item.qty,
         price: item.price?.cost,
+        seller: {
+          id:item.seller.id,
+          name:item.seller.name
+        }
       });
     });
   }

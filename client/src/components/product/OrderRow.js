@@ -72,17 +72,17 @@ function OrderRow({ order }) {
               {/* Image */}
               <Box>
                 <img
-                  src={order.productDetails[index].url}
+                  src={order.productDetails[0].url}
                   className={classes.image}
-                  alt={order.productDetails[index].title.shortTitle}
+                  alt={order.productDetails[0].title.shortTitle}
                 />
               </Box>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={8}>
               {/* Title */}
-              <Link to={`/product/${order.productDetails[index]._id}`}>
+              <Link to={`/product/${order.productDetails[0]._id}`}>
                 <Typography className={classes.itemTitle} >
-                  {makeShortText(order.productDetails[index].title.longTitle)}
+                  {makeShortText(order.productDetails[0].title.longTitle)}
                 </Typography>
               </Link>
             </Grid>

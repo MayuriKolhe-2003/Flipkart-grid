@@ -144,6 +144,22 @@ const Supercoin = () => {
         }
     }
 
+    const getreferalkey = async()=>{
+        console.log("ref");
+        const provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = await provider.getSigner();
+                const signerAddress = await signer.getAddress();
+    
+                const encoded = btoa(signerAddress);
+                
+                const link = `http://localhost:3000/login/${encoded}`;
+
+                navigator.clipboard.writeText(link);
+                console.log(link);
+    
+      }
+
     return (
         <Box className={classes.component}>
             <Box className={classes.heading}>
@@ -159,6 +175,20 @@ const Supercoin = () => {
                     View Coin Activity
                 </Button>
             </Link>
+            <br />
+            
+            <Link to='/challanges' component={RouteLink}>
+                <Button className={classes.button} startIcon={<DashboardIcon >history</DashboardIcon>}>
+                    View Challanges
+                </Button>
+            </Link>
+
+            
+                <Button className={classes.button} onClick={getreferalkey}>
+                    Refer A Friend
+                </Button>
+            
+            <br />
 
             <Box className={classes.imageContainer}>
                 <img
@@ -167,12 +197,14 @@ const Supercoin = () => {
                     className={classes.image}
                 />
 
+                <Link to='/challanges'>
                 <img
-                    src="https://rukminim2.flixcart.com/lockin/1000/1000/images/02TrendyProd.jpg?q=50"
+                    src="https://www.shutterstock.com/image-vector/challenge-sign-icon-lettering-banner-260nw-679938139.jpg"
                     alt="img"
                     className={classes.image}
-                    style={{ marginTop: '20px' }}
+                    style={{ marginTop: '20px',height:150 }}
                 />
+                </Link>
             </Box>
 
             <div className={classes.rewardsSection}>

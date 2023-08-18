@@ -55,6 +55,12 @@ function SideBar(){
                         <span>ADD Product</span></Link>
                 </li>
 
+                <li className=" nav-items nav-item">
+                    <Link className="nav-links nav-link" to="/seller/add-challenge">
+                    <i className="fa fa-plus-circle"></i>
+                        <span>ADD Challenge</span></Link>
+                </li>
+
                 {/*<!-- Nav Item - Tables -->*/}
                 <li className="nav-items nav-item">
                     <Link

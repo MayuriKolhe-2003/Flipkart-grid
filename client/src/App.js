@@ -24,6 +24,9 @@ import CoinsActivity from "./components/supercoin/CoinsActivity";
 import AddProduct from "./seller/components/Cards/AddProduct";
 import Products from "./seller/components/Tables/Products";
 import Wrapper from "./seller/components/Wrapper";
+import AddChallange from "./seller/components/Cards/AddChallange";
+import Challanges from "./components/supercoin/Challanges";
+import MyChallanges from "./components/supercoin/MyChallanges";
 
 function App() {
   return (
@@ -75,6 +78,12 @@ function App() {
             <Route exact path='/coins-activity'>
               <CoinsActivity />
             </Route>
+            <Route exact path='/challanges'>
+              <Challanges />
+            </Route>
+            <Route exact path='/challanges/my'>
+              <MyChallanges />
+            </Route>
 
             <Route exact path="/seller">
               <Wrapper />
@@ -82,9 +91,13 @@ function App() {
             <Route path="/seller/add-product">
               <AddProduct />
             </Route>
+            <Route path="/seller/add-challenge">
+              <AddChallange/>
+            </Route>
             <Route path="/seller/products">
               <Products />
             </Route>
+
 
             <Route component={ErrorPage} />
           </Switch>

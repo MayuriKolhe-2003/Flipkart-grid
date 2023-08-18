@@ -38,15 +38,22 @@ const TotalView = ({ page = "cart"}) => {
   const [discount, setDiscount] = useState(0);
   const [deliveryCharges, setDeliveryCharges] = useState(0);
   const [coinsUsed, setCoinsUsed] = useState(0);
+  const [isChecked,setChecked] = useState(true);
 
   const { cartItems, stateChangeNotifyCounter, checkboxValues } = useSelector(
     (state) => state.cartReducer
   ); // Retrieve checkboxValues from the Redux store
   const dispatch = useDispatch();
 
+  const handleCheck = () => {
+    setChecked(prevChecked => !prevChecked); // Toggle isChecked value
+    //console.log(isChecked);
+  };
+
   useEffect(() => {
     totalAmount();
-  }, [cartItems, stateChangeNotifyCounter, checkboxValues]);
+    //console.log(checkboxValues);
+  }, [cartItems, stateChangeNotifyCounter,isChecked]);
 
   const totalAmount = () => {
     let totalPrice = 0;
@@ -56,7 +63,10 @@ const TotalView = ({ page = "cart"}) => {
     cartItems.forEach((item) => {
       const itemPrice = item.price.cost * item.qty;
       const itemDiscount = (itemPrice * item.price.discount) / 100;
-      const itemCoinsUsed = checkboxValues[item._id] ? item.price.coinsUsed : 0;
+      console.log(item.price.coinsUsed);
+      console.log(isChecked);
+      const itemCoinsUsed = isChecked ? item.price.coinsUsed : 0;
+      console.log(itemCoinsUsed)
 
       totalPrice += itemPrice;
       totalDiscount += itemDiscount;
@@ -95,8 +105,9 @@ const TotalView = ({ page = "cart"}) => {
 
 
         <Typography>
+        <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
           Coins Discount
-          <span className={classes.price}>- {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
+          <span className={classes.price}> - {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
         </Typography>
 
         <Typography>

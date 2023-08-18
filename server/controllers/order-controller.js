@@ -1,11 +1,56 @@
 const Order = require("../models/orderSchema");
+const userBrand = require('../models/Brands_PurchesSchema')
 const mongoose = require("mongoose");
 
 const completeOrder = async (req, res) => {
+  //console.log(req.body.items);
+  const seller = req.body.items;
+  seller.map((it) => {
+    console.log(it)
+    console.log(it.seller.id)
+  })
   try {
+
+
     const order = new Order({ ...req.body, orderDate: Date.now() });
     const result = await order.save();
-    res.json({ orderId: result._id });
+    const userId = req.body.userId;
+    const seller = req.body.items;
+
+    const user = await userBrand.findOne({ userId });
+
+    if (!user) {
+      const re = await userBrand.create({ userId });
+
+
+    }
+
+    seller.map(async (it) => {
+
+      const resp = await userBrand.updateOne({ userId, "Brand.seller": it.seller.id }, { $inc: { "Brand.$.qty": it.qty } });
+      console.log(resp)
+      if (resp.matchedCount == 0) {
+        const pushUpdate = {
+          $push: {
+            Brand: {
+              seller: it.seller.id,
+              brandName: it.seller.name,
+              qty: it.qty
+            }
+          }
+        };
+        await userBrand.updateOne({ userId }, pushUpdate);
+      }
+
+    })
+
+
+    //const resp =    await userBrand.updateOne({userId},{user});
+    const resp = await userBrand.findOne({ userId })
+
+    res.json({ mess: "message", resp });
+
+    //res.json({ orderId: result._id });
   } catch (error) {
     console.log(error);
     res.status(400).send();

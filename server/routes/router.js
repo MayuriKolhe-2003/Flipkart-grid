@@ -54,6 +54,7 @@ const {
   paytmDataResponse,
 } = require("../controllers/payment-controller");
 const { isSpinned, setSpin } = require("../controllers/spinController");
+const {addChallange,getChallange,getBrandsInfo} = require("../controllers/challange-controller")
 
 const router = express.Router();
 
@@ -71,6 +72,7 @@ router.post('/activity/add',addActivity)
 router.get('/activity/get',getActivity)
 
 
+
 // spinnnig 
 
 router.get("/accounts/spin",isSpinned);
@@ -84,6 +86,10 @@ router.get("/products/get-products/:categoryName", getProductsByCategory);
 router.get("/products/get-product/:id", getProductById);
 router.post("/products/add-product", addProduct);
 router.get("/products/getProductSeller/:sellerid",getProductBySeller)
+
+router.post("/addChallange",addChallange)
+router.get("/getChallange",getChallange);
+router.get('/brand/getinfo',getBrandsInfo);
 
 //Cart related routes
 router.post("/cart/add-item", addItem);

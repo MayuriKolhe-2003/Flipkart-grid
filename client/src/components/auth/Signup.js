@@ -5,7 +5,7 @@ import SignupStep1 from "./SignupStep1";
 import SignupStep2 from "./SignupStep2";
 import OTPVerify from "./OTPVerify";
 
-function Signup() {
+function Signup(props) {
   const [action, setAction] = useState({
     openStep1: true,
     openStep2: false,
@@ -20,7 +20,7 @@ function Signup() {
   return (
     <>
       {action.openStep1 && <SignupStep1 handleActions={handleActions} />}
-      {action.openStep2 && <SignupStep2 />}
+      {action.openStep2 && <SignupStep2 id={props.id} />}
     </>
   );
 }
