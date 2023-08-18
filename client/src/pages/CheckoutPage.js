@@ -293,7 +293,8 @@ const CheckoutPage = () => {
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
+        //const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
+
         var coin = 0;
         if (totalAmount > 2500) {
           coin = 50;
@@ -304,9 +305,15 @@ const CheckoutPage = () => {
         else {
           coin = Math.floor(totalAmount / 100) * 2;
         }
-        console.log(signerAddress);
+
+        await axios.post("/approve/add-approve", {
+          userId: signerAddress,
+          Amount: coin
+        });
+
+        //console.log(signerAddress);
         const TransferCoins = coin - coinsUsed;
-        await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
+        //await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a",signerAddress, ethers.parseEther(TransferCoins.toString()));
 
         
         addActivity(coin).then(() => {

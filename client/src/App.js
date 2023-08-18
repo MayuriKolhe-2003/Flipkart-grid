@@ -28,13 +28,16 @@ import AddChallange from "./seller/components/Cards/AddChallange";
 import Challanges from "./components/supercoin/Challanges";
 import MyChallanges from "./components/supercoin/MyChallanges";
 import BrandReq from "./seller/components/Tables/BrandReq";
+import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+import AdminPanel from "./pages/AdminPanel";
 
 function App() {
+  const isAdminRoute = useRouteMatch('/admin');
   return (
     <div className="app">
       {isDesktop ? (
         <>
-          <Header />
+          {!isAdminRoute && <Header />}
           <Switch>
             <Route exact path="/">
               <HomePage />
@@ -100,6 +103,9 @@ function App() {
             </Route>
             <Route path="/seller/products">
               <Products />
+            </Route>
+            <Route exact path='/admin'>
+             <AdminPanel />
             </Route>
 
 
