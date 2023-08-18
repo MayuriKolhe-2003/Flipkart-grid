@@ -126,7 +126,7 @@ const Supercoin = () => {
             const balance = ethers.formatEther(balancewei, 18);
             console.log(balance);
             dispatch(setSpCoin(balance));
-            // setSpCoin(balance);
+            setSpCoin(balance);
             // const time = await erc20.timestamp();
             // console.log(time);
             // console.log(Math.floor(Date.now() / 1000));
