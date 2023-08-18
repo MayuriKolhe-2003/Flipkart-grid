@@ -106,6 +106,7 @@ function OrdersPage() {
               </Typography>
             </Box>
             {orderDetails?.map((order) => (
+              console.log(order),
               <OrderRow order={order} />
             ))}
           </Grid>

@@ -40,6 +40,7 @@ const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: [],
+        checkBoxValues:{}
       };
 
     case actionType.UPDATE_QTY:
@@ -55,20 +56,26 @@ const cartReducer = (state = initialState, action) => {
         cartItems: state.cartItems,
         stateChangeNotifyCounter: state.stateChangeNotifyCounter + 1,
       };
-    case actionType.SET_CART_ITEMS:
 
-      const cartItems = action.payload.cartItems;
+    case actionType.SET_CART_ITEMS:
       const initialCheckboxValues = {};
+      const cartItems = action.payload.cartItems;
+      if(cartItems.length == 0){
+        initialCheckboxValues = {}
+      }
+
+/*
       if (cartItems.length > 0) {
         cartItems.forEach(item => {
           initialCheckboxValues[item._id] = false;
         });
       }
+      */
 
       return {
         ...state,
         cartItems: cartItems,
-        checkboxValues: initialCheckboxValues
+        //checkboxValues: initialCheckboxValues
       };
 
     case actionType.UPDATE_CHECKBOX_VALUES:

@@ -26,7 +26,7 @@ import {
 
 import useQuery from "../../hooks/useQuery";
 import { makeCapitalizeText } from "../../utils/makeCapitalizeText";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   signupInputs: {
@@ -50,8 +50,10 @@ const useStyles = makeStyles((theme) => ({
     margin: "0px 10px",
   },
 }));
-function SignupStep2() {
-  const {id} = useParams()
+function SignupStep2(props) {
+  const id = props.id;
+  console.log("in signup" + id);
+  
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({
     fName: "",
@@ -166,10 +168,20 @@ function SignupStep2() {
       const { isAuth, user } = await authentication();
       dispatch(setIsAuthenticate(isAuth));
       dispatch(setUserInfo(user));
-      console.log(id);
+     if(id){
+
+     }else{
+      console.log("not referred");
+     }
+
+      
+      
+      //const address_referal = searchParams.get("id");
+      //const decoded_address = atob(address_referal);
+      //console.log(address_referal);
+      //console.log(decoded_address);
 
       setLoading(false);
-
       //Modal Close
       if (popupLogin) {
         dispatch(modalClose());

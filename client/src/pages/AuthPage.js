@@ -13,6 +13,7 @@ import Signup from "../components/auth/Signup";
 import ToastMessageContainer from "../components/ToastMessageContainer";
 
 import "../styles/AuthPage.css";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -22,6 +23,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AuthPage({ popup = false }) {
+  const {id} = useParams();
+  let decoded_address ;
+  if(id){
+    console.log(id);
+     decoded_address= atob(id);
+    console.log(decoded_address);
+  }
+  
+
   const [isOpen, setIsOpen] = useState(true);
   const { isLogin } = useSelector((state) => state.userReducer);
   const { isAuthenticate } = useSelector((state) => state.userReducer);
@@ -59,7 +69,7 @@ function AuthPage({ popup = false }) {
           </p>
         </div>
       </div>
-      <div className="container_right">{isLogin ? <Login /> : <Signup />}</div>
+      <div className="container_right">{isLogin ? <Login /> : <Signup id={decoded_address} />}</div>
       <Backdrop className={classes.backdrop} open={isOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>

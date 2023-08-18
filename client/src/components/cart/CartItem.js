@@ -74,7 +74,7 @@ const CartItem = ({ item}) => {
 
   const dispatch = useDispatch();
   const { checkboxValues } = useSelector((state) => state.cartReducer);
-  console.log(checkboxValues)
+  //console.log(checkboxValues)
   const isChecked = checkboxValues[item._id] || false; // Retrieve checkbox value from Redux state
 
   const handleCheck = () => {
@@ -126,6 +126,7 @@ const CartItem = ({ item}) => {
 
           </Link>
 
+          {/*
           {item.price.coinsUsed && item.price.coinsUsed <= spCoin
            ?   <Typography style={{ color: '#000' }}>
             <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
@@ -135,6 +136,8 @@ const CartItem = ({ item}) => {
             <span className={classes.bold}>  + ₹ {finalPrice - item.price.coinsUsed} </span>
           </Typography> : ""}
 
+          */}
+          
 
           <Button className={classes.remove} onClick={dialogOpen}>
             Remove

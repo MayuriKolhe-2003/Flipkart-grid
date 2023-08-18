@@ -4,4 +4,5 @@ export const CLEAR_CART="clearCart";
 export const UPDATE_QTY="updateQty";
 export const SET_CART_ITEMS="setCartItems";
 export const UPDATE_CHECKBOX_VALUES = "updateCheckboxValues"
+export const RESET_CHECKBOX_VALUES = "resetCheckboxValues"
 

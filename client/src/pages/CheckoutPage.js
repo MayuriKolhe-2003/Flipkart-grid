@@ -18,6 +18,7 @@ import axios from "../adapters/axios";
 import { clearCart, getCartItems } from "../actions/cartActions";
 import { getAddresses } from "../actions/addressActions";
 import { setOrderItems } from "../actions/orderActions";
+import {resetCheckboxValues} from "../actions/cartActions"
 
 import { shieldIcon, superCoin } from "../constants/data";
 import { post } from "../utils/paytm";
@@ -177,6 +178,8 @@ const CheckoutPage = () => {
     return obj.title.shortTitle;
   })
 
+  console.log(checkboxValues);
+
 
   useEffect(() => {
     //check if request from cart page or not
@@ -191,7 +194,7 @@ const CheckoutPage = () => {
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
-      calcCoins();
+      //calcCoins();
     } else {
       history.replace("/login?ref=checkout?init=true");
     }
@@ -199,7 +202,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     dispatch(setOrderItems(cartItems));
-    calcCoins();
+    //calcCoins();
   }, [cartItems]);
 
   useEffect(() => {
@@ -285,6 +288,7 @@ const CheckoutPage = () => {
           coinsUsed : coinsUsed,
         });
         await dispatch(clearCart());
+         //await dispatch(resetCheckboxValues());
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
@@ -322,7 +326,7 @@ const CheckoutPage = () => {
         .catch((err) => {
           console.log(err);
         });
-        // window.location.replace("order-success");
+         window.location.replace("order-success");
       } catch (error) {
         console.log(error);
         window.location.replace("order-failed");
