@@ -69,6 +69,13 @@ function SideBar(){
                         <span>My Products</span></Link>
                 </li>
 
+                <li className="nav-items nav-item">
+                    <Link
+                     className="nav-links nav-link" to="/seller/brandreq">
+                    <i className="fas fa-clipboard-list"></i>
+                        <span>View Brand Requests</span></Link>
+                </li>
+
                 {/*<!-- Divider -->*/}
                 <hr className="sidebar-divider d-none d-md-block"/>
             </ul>

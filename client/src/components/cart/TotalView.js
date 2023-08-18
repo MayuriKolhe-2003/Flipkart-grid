@@ -63,6 +63,8 @@ const TotalView = ({ page = "cart"}) => {
     cartItems.forEach((item) => {
       const itemPrice = item.price.cost * item.qty;
       const itemDiscount = (itemPrice * item.price.discount) / 100;
+
+      console.log(item);
       console.log(item.price.coinsUsed);
       console.log(isChecked);
       const itemCoinsUsed = isChecked ? item.price.coinsUsed : 0;

@@ -3,6 +3,7 @@ import axios from '../../adapters/axios';
 import { makeStyles, Modal, Grid, Link, Box, StyleRules, Typography, Button, Card, CardContent } from '@material-ui/core';
 import { Link as RouteLink } from 'react-router-dom'
 import { useSelector } from 'react-redux';
+import { ethers } from 'ethers';
 
 const useStyles = makeStyles((theme) => ({
     component: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         borderRadius: theme.spacing(2),
-        backgroundColor: 'lightblue',
+        backgroundColor: '#d6e0f1;',
         boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.2s',
         '&:hover': {
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bolder'
     },
     claimButton: {
-        marginTop:10,
+        marginTop: 10,
         backgroundColor: '#FF0000', // Red background color
         color: '#FFFFFF', // White text color
         '&:hover': {
@@ -87,15 +88,15 @@ const Challanges = () => {
             const response = await axios.get('/getChallange');
             setbrandChallege(response.data);
             console.log(user._id);
-    
+
         } catch (error) {
             console.error("Error fetching rewards:", error);
         }
     };
 
-    const fetchuserbrand = async()=>{
-        try{
-                    
+    const fetchuserbrand = async () => {
+        try {
+
             const uid = "64da2f56b0f58304aba7cbf0";
             const response1 = await axios.get(`/brand/getinfo?id=${uid}`);
             const data = response1.data;
@@ -106,9 +107,31 @@ const Challanges = () => {
             console.error("Error fetching rewards:", error);
         }
     }
-    
+
+    const claimreward = async (sellerid, qty) => {
+        console.log(sellerid);
+        console.log(qty);
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const signerAddress = await signer.getAddress();
+
+        try {
+            const resp = await axios.post('seller/addbrand', {
+                sellerid: sellerid,
+                userid: user._id,
+                userwallet: signerAddress,
+                coins: qty
+            });
+
+        } catch (error) {
+            console.error("Error :", error);
+        }
+    }
+
     useEffect(() => {
-        
+
         fetchuserbrand();
         fetchbrands();
     }, []); // Run the effect only once on mount
@@ -126,7 +149,7 @@ const Challanges = () => {
 
 
                         {userChallenge && brandsChallenge && brandsChallenge.map((brand, index) => {
-                            
+
                             const brandIdToFind = brand.seller.id;
                             console.log(brandIdToFind)
                             const brandEntry = userChallenge.Brand.find(
@@ -144,21 +167,21 @@ const Challanges = () => {
                                                 <Typography variant="body1">
                                                     <span className={classes.bold}>You Can Earn: </span> {brand.coinsRewarded}
                                                 </Typography>
-                                                {/* ... (coin icon) */}
+                                                <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" alt="Supercoin Icon" style={{ height: 18 }} />
                                             </div>
                                             <Typography variant="body1">
                                                 <span className={classes.bold}>Challange Completed : </span>
                                                 <span className={classes.red}>
-                                                    {brandEntry ? `${brandEntry.qty} / ` : "0"}
+                                                    {brandEntry ? `${brandEntry.qty} / ` : "0 / "}
                                                     {brand.transactionsRequired}
                                                 </span>
                                             </Typography>
 
-                                            {brandEntry && brandEntry.qty == brand.transactionsRequired ? 
-                                            <Button variant="contained" className={classes.claimButton}>
-                                            Claim Reward
-                                        </Button> 
-                                        : ""}
+                                            {brandEntry && brandEntry.qty == brand.transactionsRequired ?
+                                                <Button variant="contained" className={classes.claimButton} onClick={() => claimreward(brandIdToFind, brand.coinsRewarded)} >
+                                                    Claim Reward
+                                                </Button>
+                                                : ""}
                                         </CardContent>
                                     </Card>
                                 </Grid>

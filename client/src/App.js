@@ -27,6 +27,7 @@ import Wrapper from "./seller/components/Wrapper";
 import AddChallange from "./seller/components/Cards/AddChallange";
 import Challanges from "./components/supercoin/Challanges";
 import MyChallanges from "./components/supercoin/MyChallanges";
+import BrandReq from "./seller/components/Tables/BrandReq";
 
 function App() {
   return (
@@ -87,6 +88,9 @@ function App() {
 
             <Route exact path="/seller">
               <Wrapper />
+            </Route>
+            <Route exact path="/seller/brandreq">
+              <BrandReq />
             </Route>
             <Route path="/seller/add-product">
               <AddProduct />

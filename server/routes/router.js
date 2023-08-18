@@ -54,7 +54,8 @@ const {
   paytmDataResponse,
 } = require("../controllers/payment-controller");
 const { isSpinned, setSpin } = require("../controllers/spinController");
-const {addChallange,getChallange,getBrandsInfo} = require("../controllers/challange-controller")
+const {addChallange,getChallange,getBrandsInfo,resetBrand} = require("../controllers/challange-controller")
+const{getBrandRequest,addRequest} = require("../controllers/brand-request-controller");
 
 const router = express.Router();
 
@@ -90,6 +91,9 @@ router.get("/products/getProductSeller/:sellerid",getProductBySeller)
 router.post("/addChallange",addChallange)
 router.get("/getChallange",getChallange);
 router.get('/brand/getinfo',getBrandsInfo);
+router.get('/brand/reset',resetBrand); 
+router.get('/seller/getbrandreq',getBrandRequest);
+router.post('/seller/addbrand',addRequest);
 
 //Cart related routes
 router.post("/cart/add-item", addItem);
