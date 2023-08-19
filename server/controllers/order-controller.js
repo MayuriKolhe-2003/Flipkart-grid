@@ -95,4 +95,13 @@ const getOrderDetails = async (req, res) => {
   }
 };
 
-module.exports = { completeOrder, getOrderDetails };
+const getOrders = async (req, res) => {
+  try {
+    const result = await Order.find({});
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+module.exports = { completeOrder, getOrderDetails ,getOrders};

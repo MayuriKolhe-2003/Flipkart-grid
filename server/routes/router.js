@@ -47,6 +47,7 @@ const {
 const {
   completeOrder,
   getOrderDetails,
+  getOrders,
 } = require("../controllers/order-controller");
 
 const {
@@ -99,7 +100,7 @@ router.get("/products/getProductSeller/:sellerid",getProductBySeller)
 router.post("/addChallange",addChallange)
 router.get("/getChallange",getChallange);
 router.get('/brand/getinfo',getBrandsInfo);
-router.get('/brand/reset',resetBrand); 
+router.delete('/brand/reset',resetBrand); 
 router.get('/seller/getbrandreq',getBrandRequest);
 router.post('/seller/addbrand',addRequest);
 router.delete('/seller/delbrand/:id',delRequest);
@@ -124,6 +125,7 @@ router.delete("/address/delete-address", deleteAddress);
 
 router.post("/orders/complete-order", completeOrder);
 router.post("/orders/get-order-details", getOrderDetails);
+router.get("/order/allorders",getOrders);
 
 //Payment related routes
 router.post("/payment/paytm", paytmGatway);

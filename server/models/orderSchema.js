@@ -7,6 +7,10 @@ const orderSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         required: true,
       },
+      seller:{
+        id:mongoose.Schema.ObjectId,
+        name:String
+      },
       qty: Number,
       price: Number,
     },
