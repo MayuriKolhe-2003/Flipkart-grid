@@ -107,6 +107,22 @@ const Challanges = () => {
             console.error("Error fetching rewards:", error);
         }
     }
+    const addActivity = async (coin) => {
+        try {
+            console.log(coin);
+            await axios.post("activity/add", {
+                userId: user._id,
+                debited: false,
+                credited: true,
+                activity: "Daily Spin",
+                // productname:"",
+                coins: coin
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
 
     const claimreward = async (sellerid, qty) => {
         console.log(sellerid);
@@ -128,6 +144,16 @@ const Challanges = () => {
         } catch (error) {
             console.error("Error :", error);
         }
+        addActivity(qty).then(() => {
+            console.log("Success");
+            axios.get(`/activity/get?id=${user._id}`)
+                .then(res => {
+                    console.log(res);
+                })
+        })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     useEffect(() => {

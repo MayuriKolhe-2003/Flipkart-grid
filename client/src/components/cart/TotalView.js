@@ -34,13 +34,14 @@ const useStyle = makeStyles({
 
 export var coinsUsed = 0;
 
-const TotalView = ({ page = "cart"}) => {
+const TotalView = ({ page = "cart" }) => {
   const classes = useStyle();
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deliveryCharges, setDeliveryCharges] = useState(0);
-  
-  const [isChecked,setChecked] = useState(true);
+  const [getSuper, setGetSuper] = useState(0);
+
+  const [isChecked, setChecked] = useState(true);
   const { spCoin, isAuthenticate } = useSelector((state) => state.userReducer);
 
   const { cartItems, stateChangeNotifyCounter, checkboxValues } = useSelector(
@@ -56,7 +57,7 @@ const TotalView = ({ page = "cart"}) => {
   useEffect(() => {
     totalAmount();
     //console.log(checkboxValues);
-  }, [cartItems, stateChangeNotifyCounter,isChecked]);
+  }, [cartItems, stateChangeNotifyCounter, isChecked]);
 
   const totalAmount = () => {
     let totalPrice = 0;
@@ -78,10 +79,23 @@ const TotalView = ({ page = "cart"}) => {
       totalCoinsUsed += itemCoinsUsed;
     });
 
+    const getCoin = () => {
+      if (totalPrice - totalDiscount - totalCoinsUsed + deliveryCharges > 2500){
+        setGetSuper(50);
+      }
+      else if (totalPrice - totalDiscount - totalCoinsUsed + deliveryCharges < 100){
+        setGetSuper(0);
+      }
+      else {
+        setGetSuper(Math.floor((totalPrice - totalDiscount - totalCoinsUsed + deliveryCharges) / 100) * 2);
+      }
+    }
+
     setPrice(totalPrice);
     setDiscount(totalDiscount);
-    coinsUsed = (totalCoinsUsed <= spCoin ? totalCoinsUsed : 0) ;
+    coinsUsed = (totalCoinsUsed <= spCoin ? totalCoinsUsed : 0);
     console.log(coinsUsed);
+    getCoin();
 
     setDeliveryCharges(totalPrice - totalDiscount > 500 ? 0 : 40);
 
@@ -103,21 +117,21 @@ const TotalView = ({ page = "cart"}) => {
           Price ({cartItems?.length} item)
           <span className={classes.price}>₹{price}</span>
         </Typography>
-        {page === "cart" && (
+
           <Typography>
             Discount<span className={classes.price}>- ₹{discount}</span>
           </Typography>
-        )}
+      
 
 
-        { spCoin >= coinsUsed ? 
+        {spCoin >= coinsUsed ?
           <Typography>
-        <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
-          Coins Discount
-          <span className={classes.price}> - {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
-        </Typography> 
-        : ""  
-      }
+            <input type="checkbox" className={classes.input} onChange={handleCheck} checked={isChecked} />
+            Coins Discount
+            <span className={classes.price}> - {coinsUsed} <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} /></span>
+          </Typography>
+          : ""
+        }
 
         <Typography>
           Delivery Charges
@@ -131,8 +145,8 @@ const TotalView = ({ page = "cart"}) => {
             ₹{price - discount - coinsUsed + deliveryCharges}
           </span>
         </Typography>
-        <Typography style={{ fontSize: 16, color: "green" }}>
-          You will save ₹{discount - deliveryCharges} on this order
+        <Typography style={{ fontSize: 14, color: "green" }}>
+          You get <img src="https://rukminim2.flixcart.com/lockin/32/32/images/super_coin_icon_22X22.png?q=90" style={{ width: 15, height: 15 }} alt="img"/> {getSuper} on this order
         </Typography>
       </Box>
     </Box>
