@@ -73,9 +73,24 @@ const RewardsModal = ({ item, open, handleClose, spCoin }) => {
   const redeemOffer = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
+    const walletrec = new ethers.Wallet("70166246b7a035fffd1e9e18e0da53449728d9800b63b69d120407ebe072f6f4", provider);
     const signer = await provider.getSigner();
-    const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
-    await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString()));
+    const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+    // await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString()));
+
+    const transaction = {
+      to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+      data: contract.interface.encodeFunctionData('transfer', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString())]),
+    };
+
+    const tx = await walletrec.sendTransaction(transaction)
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log('Transaction hash:', tx.hash);
+
+    await tx.wait();
+    console.log('Transaction confirmed');
     addActivity();
     handleClose()
 

@@ -119,7 +119,7 @@ const Supercoin = () => {
             const provider = new ethers.BrowserProvider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
 
-            const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, provider);
+            const erc20 = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, provider);
             const signer = await provider.getSigner();
             // const erc20trans = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
             

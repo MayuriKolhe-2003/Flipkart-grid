@@ -283,10 +283,11 @@ const CheckoutPage = () => {
         await dispatch(clearCart());
         //await dispatch(resetCheckboxValues());
         const provider = new ethers.BrowserProvider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
+        const wallet = new ethers.Wallet("2df9be0c2d553ba046a7bfc125427079f0569ede897096f81e8bc95b675279f8", provider);
+        const walletrec = new ethers.Wallet("70166246b7a035fffd1e9e18e0da53449728d9800b63b69d120407ebe072f6f4", provider);
         const signer = await provider.getSigner();
-        const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer)
+        const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+        const recipient = await signer.getAddress();
 
         var coin = 0;
         if (totalAmount > 2500) {
@@ -302,13 +303,33 @@ const CheckoutPage = () => {
         // console.log(coinsUsed);
 
         if (TransferCoins > 0) {
-          await axios.post("/approve/add-approve", {
-            userId: signerAddress,
-            Amount: TransferCoins
-          });
+          const transaction = {
+            to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+            data: contract.interface.encodeFunctionData('transferFrom', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", recipient, ethers.parseEther(Math.abs(TransferCoins).toString())]),
+          };
+          const tx = await wallet.sendTransaction(transaction)
+            .catch((err) => {
+              console.log(err);
+            });
+          console.log('Transaction hash:', tx.hash);
+
+          await tx.wait();
+          console.log('Transaction confirmed');
         }
         else if (TransferCoins < 0) {
-          await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(Math.abs(TransferCoins).toString()));
+          const transaction = {
+            to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+            data: contract.interface.encodeFunctionData('transfer', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(Math.abs(TransferCoins).toString())]),
+          };
+
+          const tx = await walletrec.sendTransaction(transaction)
+            .catch((err) => {
+              console.log(err);
+            });
+          console.log('Transaction hash:', tx.hash);
+
+          await tx.wait();
+          console.log('Transaction confirmed');
         }
 
         //console.log(signerAddress);
@@ -329,7 +350,7 @@ const CheckoutPage = () => {
             .then(res => {
               console.log(res);
             }
-          )
+            )
         })
           .catch((err) => {
             console.log(err);

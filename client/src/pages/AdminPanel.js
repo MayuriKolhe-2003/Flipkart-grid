@@ -14,7 +14,24 @@ export default function AdminPanel() {
 
 
     const handleTransfer = async () => {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = provider.getSigner();
+        const wallet = new ethers.Wallet("2df9be0c2d553ba046a7bfc125427079f0569ede897096f81e8bc95b675279f8", provider);
+        const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+        const recipient = "0x632aFBa0CBe1e4eC7667a062cd416b91A0142786";
+        const amount = ethers.parseEther('1');
 
+        const transaction = {
+            to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+            data: contract.interface.encodeFunctionData('transfer', [recipient, amount]),
+        };
+    
+        // const tx = (await signer).sendTransaction(transaction);
+        const tx = await wallet.sendTransaction(transaction);
+        console.log('Transaction hash:', tx.hash);
+    
+        await tx.wait();
+        console.log('Transaction confirmed');
     };
 
     const [transactions, setTransactions] = useState([]);
@@ -30,7 +47,7 @@ export default function AdminPanel() {
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         const signerAddress = await signer.getAddress();
-        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, provider);
+        const erc20 = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, provider);
         setTotalSupply(await erc20.totalSupply());
         if (signerAddress !== "0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a") {
             setShowDialog(true);
@@ -55,7 +72,7 @@ export default function AdminPanel() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
-        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
+        const erc20 = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
 
         await erc20.mint(mntCoin);
 
@@ -68,7 +85,7 @@ export default function AdminPanel() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
-        const erc20 = new ethers.Contract("0xAA7A440B0EfBA778d3f0F4415A8541569bb405C7", erc20abi, signer);
+        const erc20 = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
 
         !transaction.isMultiple ?
             await erc20.transfer(transaction.userId, ethers.parseEther(transaction.Amount.toString()))
