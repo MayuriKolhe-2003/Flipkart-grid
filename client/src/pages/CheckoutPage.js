@@ -286,7 +286,7 @@ const CheckoutPage = () => {
         const wallet = new ethers.Wallet("2df9be0c2d553ba046a7bfc125427079f0569ede897096f81e8bc95b675279f8", provider);
         const walletrec = new ethers.Wallet("70166246b7a035fffd1e9e18e0da53449728d9800b63b69d120407ebe072f6f4", provider);
         const signer = await provider.getSigner();
-        const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+        const contract = new ethers.Contract("0x8d45F1D60F998254a51E4cc1A73De7d820e67f93", erc20abi, signer);
         const recipient = await signer.getAddress();
 
         var coin = 0;
@@ -304,7 +304,7 @@ const CheckoutPage = () => {
 
         if (TransferCoins > 0) {
           const transaction = {
-            to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+            to: "0x8d45F1D60F998254a51E4cc1A73De7d820e67f93",
             data: contract.interface.encodeFunctionData('transferFrom', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", recipient, ethers.parseEther(Math.abs(TransferCoins).toString())]),
           };
           const tx = await wallet.sendTransaction(transaction)
@@ -318,7 +318,7 @@ const CheckoutPage = () => {
         }
         else if (TransferCoins < 0) {
           const transaction = {
-            to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+            to: "0x8d45F1D60F998254a51E4cc1A73De7d820e67f93",
             data: contract.interface.encodeFunctionData('transfer', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(Math.abs(TransferCoins).toString())]),
           };
 

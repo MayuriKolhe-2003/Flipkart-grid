@@ -75,11 +75,11 @@ const RewardsModal = ({ item, open, handleClose, spCoin }) => {
     await provider.send("eth_requestAccounts", []);
     const walletrec = new ethers.Wallet("70166246b7a035fffd1e9e18e0da53449728d9800b63b69d120407ebe072f6f4", provider);
     const signer = await provider.getSigner();
-    const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+    const contract = new ethers.Contract("0x8d45F1D60F998254a51E4cc1A73De7d820e67f93", erc20abi, signer);
     // await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString()));
 
     const transaction = {
-      to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+      to: "0x8d45F1D60F998254a51E4cc1A73De7d820e67f93",
       data: contract.interface.encodeFunctionData('transfer', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", ethers.parseEther(item.coins.toString())]),
     };
 

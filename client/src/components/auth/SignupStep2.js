@@ -174,21 +174,22 @@ function SignupStep2(props) {
       console.log(id);
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
+      const wallet = new ethers.Wallet("2df9be0c2d553ba046a7bfc125427079f0569ede897096f81e8bc95b675279f8", provider);
       const signer = await provider.getSigner();
-      const signerAddress = await signer.getAddress();
-      await axios.post("approve/add-approve", {
-        userId: signerAddress,
-        Amount: 3,
-        userId2: id,
-        Amount2: 5,
-        isMultiple: true
-      })
-      .then(() => {
-        console.log("Referral Successful");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      const recipient = await signer.getAddress();
+      const contract = new ethers.Contract("0x8d45F1D60F998254a51E4cc1A73De7d820e67f93", erc20abi, signer);
+      const transaction = {
+        to: "0x8d45F1D60F998254a51E4cc1A73De7d820e67f93",
+        data: contract.interface.encodeFunctionData('performTwoTransactions', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", recipient, ethers.parseEther('3'), id, ethers.parseEther('5')]),
+      };
+      const tx = await wallet.sendTransaction(transaction)
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log('Transaction hash:', tx.hash);
+
+      await tx.wait();
+      console.log('Transaction confirmed');
      }else{
       console.log("not referred");
      }
