@@ -166,6 +166,7 @@ function SignupStep2(props) {
         lname: makeCapitalizeText(values.lName),
         password: values.password,
         phone: phoneNumber,
+        tag: ""
       });
       const { isAuth, user } = await authentication();
       dispatch(setIsAuthenticate(isAuth));

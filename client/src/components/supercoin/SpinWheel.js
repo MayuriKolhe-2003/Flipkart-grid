@@ -67,12 +67,12 @@ const SpinWheel = () => {
     const wallet = new ethers.Wallet("2df9be0c2d553ba046a7bfc125427079f0569ede897096f81e8bc95b675279f8", provider);
     const signer = await provider.getSigner();
     const recipient = await signer.getAddress();
-    const contract = new ethers.Contract("0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64", erc20abi, signer);
+    const contract = new ethers.Contract("0x8d45F1D60F998254a51E4cc1A73De7d820e67f93", erc20abi, signer);
     //const erc20 = new ethers.Contract("0xd9E634ADFB7a003cc044056abB36a53a7a74c180", erc20abi, signer)
     //await erc20.transfer("0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", signerAddress, ethers.parseEther(selectedSection.toString()));
 
     const transaction = {
-      to: "0x9B9aA9f21Ae82ef9E7B7041D3AB3Cd958520df64",
+      to: "0x8d45F1D60F998254a51E4cc1A73De7d820e67f93",
       data: contract.interface.encodeFunctionData('transferFrom', ["0xd6976647ce4EDBE5760629Ca4481DDE1ceD4593a", recipient, ethers.parseEther(Math.abs(selectedSection).toString())]),
     };
     const tx = await wallet.sendTransaction(transaction)

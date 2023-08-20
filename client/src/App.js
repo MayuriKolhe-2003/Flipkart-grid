@@ -32,7 +32,7 @@ import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 import AdminPanel from "./pages/AdminPanel";
 
 function App() {
-  const isAdminRoute = useRouteMatch('/admin');
+  const isAdminRoute = useRouteMatch('/seller');
   return (
     <div className="app">
       {isDesktop ? (
@@ -99,13 +99,13 @@ function App() {
               <AddProduct />
             </Route>
             <Route path="/seller/add-challenge">
-              <AddChallange/>
+              <AddChallange />
             </Route>
             <Route path="/seller/products">
               <Products />
             </Route>
             <Route exact path='/admin'>
-             <AdminPanel />
+              <AdminPanel />
             </Route>
 
 
